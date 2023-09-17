@@ -21,4 +21,17 @@ main {
     position: absolute; 
     top: 40vh;
     left: 10vw;
+    animation: float-animation 3s infinite;
+}
+
+@keyframes float-animation {
+    0% { 
+        transform: translateY(10%)
+    }
+    50% {
+        transform: translateY(-10%)
+    }
+    100% {
+        transform: translateY(10%)
+    }
 }
