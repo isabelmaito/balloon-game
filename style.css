@@ -12,3 +12,13 @@ main {
     background: url("./images/background01.png");
     background-size: 100vw 100vh;
 }
+
+#balloon {
+    width: 20vh;
+    height: 20vh;
+    background: url("./images/Drifblim.png");
+    background-size: 20vh 20vh;
+    position: absolute; 
+    top: 40vh;
+    left: 10vw;
+}
