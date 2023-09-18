@@ -3,4 +3,4 @@
 Esse repositório implementa um jogo de balão.
 
 
-![Balloon Game Screenshot](screenshots/Drifblim.gif)
+![Balloon Game Screenshot](screenshots/Drifblim2.gif)
