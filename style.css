@@ -59,5 +59,14 @@ main {
     background:url("./images/coin-flip-39.gif");
     background-size: 10vh 10vh;
     position: absolute;
-    animation: slide-background 7s linear infinite;
+    animation: slide-coin 7s linear;
+}
+
+@keyframes slide-coin {
+    from{
+        transform: translateX(0)
+    }
+    to{
+        transform: translateX(calc(1px - 100vw - 10vh))
+    }
 }
