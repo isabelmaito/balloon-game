@@ -1,3 +1,4 @@
+const main_div = document.getElementById("main")
 const balloon = document.getElementById("balloon")
 const velocidade = 5
 let press_up = false
@@ -55,6 +56,15 @@ function moveBalloon(){
     }
 }
 
+function spawnCoin(){
+    const coin = document.createElement("div");
+    coin.classList.add("coin");
+    coin.style.left="100vw"
+    coin.style.top=(Math.random()*90)+"vh"
+    main_div.appendChild(coin)
+
+}
+
 function gameLoop(){
     moveBalloon()
     setTimeout(gameLoop,parseInt(1000/60))
@@ -63,3 +73,4 @@ function gameLoop(){
 document.addEventListener("keydown",handleKeyDown)
 document.addEventListener("keyup",handleKeyUp)
 gameLoop()
+spawnCoin()

@@ -52,3 +52,12 @@ main {
         transform: translateY(10%)
     }
 }
+
+.coin {
+    width: 10vh;
+    height: 10vh;
+    background:url("./images/coin-flip-39.gif");
+    background-size: 10vh 10vh;
+    position: absolute;
+    animation: slide-background 7s linear infinite;
+}
