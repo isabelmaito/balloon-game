@@ -1,0 +1,96 @@
+/*
+ * Balloon skins drawn only with CSS. Each skin is a `balloon--<id>` modifier on
+ * the balloon entity; "classic" keeps the sprite image from style.css.
+ * The sprite is a square box: `::before` draws the envelope, `::after` the details.
+ */
+
+.balloon--party,
+.balloon--hot-air,
+.balloon--heart,
+.balloon--star {
+    --string-color: #f4f1e8;
+    --string-width: 1.5%;
+    --string-length: 34%;
+    --highlight: rgba(255, 255, 255, 0.55);
+}
+
+.balloon--party > .sprite,
+.balloon--hot-air > .sprite,
+.balloon--heart > .sprite,
+.balloon--star > .sprite {
+    position: relative;
+    background: linear-gradient(var(--string-color), var(--string-color))
+        center bottom / var(--string-width) var(--string-length) no-repeat;
+}
+
+.balloon--party > .sprite::before,
+.balloon--party > .sprite::after,
+.balloon--hot-air > .sprite::before,
+.balloon--hot-air > .sprite::after,
+.balloon--heart > .sprite::before,
+.balloon--star > .sprite::before {
+    content: "";
+    position: absolute;
+}
+
+/* Party: a round rubber balloon with a shine and a knot. */
+.balloon--party {
+    --party-light: #ff7a7a;
+    --party-main: #e0233a;
+    --party-shade: #8e1020;
+}
+
+.balloon--party > .sprite::before {
+    top: 0;
+    left: 17%;
+    width: 66%;
+    height: 66%;
+    border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+    background:
+        radial-gradient(ellipse 12% 16% at 34% 28%, var(--highlight) 60%, transparent 100%),
+        radial-gradient(circle at 38% 32%, var(--party-light), var(--party-main) 55%, var(--party-shade));
+}
+
+.balloon--party > .sprite::after {
+    top: 64%;
+    left: 45%;
+    width: 10%;
+    height: 6%;
+    background: var(--party-shade);
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+/* Hot-air: a striped envelope, ropes and a wicker basket. */
+.balloon--hot-air {
+    --stripe-a: #f25c3b;
+    --stripe-b: #ffe9b3;
+    --stripe-width: 12.5%;
+    --rope-color: #5a3b1a;
+    --wicker-light: #c98b4a;
+    --wicker-dark: #8a5a2b;
+    --string-length: 0%;
+}
+
+.balloon--hot-air > .sprite::before {
+    top: 0;
+    left: 12%;
+    width: 76%;
+    height: 66%;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background:
+        radial-gradient(circle at 35% 30%, var(--highlight), transparent 45%),
+        radial-gradient(circle at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.25)),
+        repeating-linear-gradient(90deg, var(--stripe-a) 0 var(--stripe-width), var(--stripe-b) 0 calc(var(--stripe-width) * 2));
+}
+
+.balloon--hot-air > .sprite::after {
+    top: 62%;
+    left: 36%;
+    width: 28%;
+    height: 36%;
+    background:
+        linear-gradient(var(--rope-color), var(--rope-color)) left top / 7% 62% no-repeat,
+        linear-gradient(var(--rope-color), var(--rope-color)) right top / 7% 62% no-repeat,
+        repeating-linear-gradient(90deg, var(--wicker-light) 0 12%, var(--wicker-dark) 0 16%) left bottom / 100% 40% no-repeat;
+    border-radius: 0 0 20% 20% / 0 0 12% 12%;
+}
