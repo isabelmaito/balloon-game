@@ -1,6 +1,7 @@
 import { BALLOON, COIN } from "./config.js"
 import { GameLoop } from "./core/game-loop.js"
 import { Keyboard } from "./core/keyboard.js"
+import { Spawner } from "./core/spawner.js"
 import { Balloon } from "./entities/balloon.js"
 import { Coin } from "./entities/coin.js"
 import { randomBetween } from "./utils/math.js"
@@ -37,7 +38,14 @@ function spawnCoin() {
     playfield.appendChild(coin.element)
 }
 
+const coinSpawner = new Spawner({
+    spawn: spawnCoin,
+    minInterval: COIN.minSpawnInterval,
+    maxInterval: COIN.maxSpawnInterval,
+})
+
 function updateCoins(deltaSeconds) {
+    coinSpawner.update(deltaSeconds)
     for (const coin of coins) {
         coin.update(deltaSeconds)
         coin.render()
@@ -56,4 +64,3 @@ const loop = new GameLoop(update)
 
 keyboard.attach()
 loop.start()
-spawnCoin()

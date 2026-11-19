@@ -9,4 +9,6 @@ export const BALLOON = {
 export const COIN = {
     sizeRatio: 0.1,
     speedRatio: 0.35,
+    minSpawnInterval: 0.8,
+    maxSpawnInterval: 2,
 }
