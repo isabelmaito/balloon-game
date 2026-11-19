@@ -11,3 +11,8 @@ export function normalize({ x, y }) {
 export function randomBetween(min, max) {
     return min + Math.random() * (max - min)
 }
+
+/** Picks one item of a non-empty list; `random` returns a number in [0, 1). */
+export function pickRandom(items, random = Math.random) {
+    return items[Math.floor(random() * items.length)]
+}

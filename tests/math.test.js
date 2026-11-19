@@ -1,6 +1,6 @@
 import { describe, it } from "node:test"
 import assert from "node:assert/strict"
-import { clamp, normalize } from "../src/utils/math.js"
+import { clamp, normalize, pickRandom } from "../src/utils/math.js"
 
 describe("clamp", () => {
     it("limits values to the range", () => {
@@ -18,5 +18,14 @@ describe("normalize", () => {
 
     it("keeps the zero vector", () => {
         assert.deepEqual(normalize({ x: 0, y: 0 }), { x: 0, y: 0 })
+    })
+})
+
+describe("pickRandom", () => {
+    it("maps the random number onto the list", () => {
+        const items = ["a", "b", "c"]
+        assert.equal(pickRandom(items, () => 0), "a")
+        assert.equal(pickRandom(items, () => 0.5), "b")
+        assert.equal(pickRandom(items, () => 0.999), "c")
     })
 })
