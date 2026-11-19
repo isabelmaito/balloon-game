@@ -104,7 +104,7 @@ body[data-game-state="paused"] .sprite::after {
 
 /* Balloon status: blink while invulnerable, fall away when out of lives. */
 .balloon[data-effects~="invulnerable"] {
-    animation: invulnerable-blink 0.2s steps(2, jump-none) infinite;
+    animation: invulnerable-blink 0.4s steps(2, jump-none) infinite;
 }
 
 body[data-game-state="paused"] .balloon {
