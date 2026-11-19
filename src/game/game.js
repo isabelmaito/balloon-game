@@ -137,7 +137,7 @@ export class Game {
             skin,
         })
         this.playfield.appendChild(balloon.element)
-        return new Player({ id, balloon, controls })
+        return new Player({ id, balloon, controls, lives: this.difficulty.lives })
     }
 
     /** Keeps balloons proportional to the viewport, which may be 0 before first layout. */
