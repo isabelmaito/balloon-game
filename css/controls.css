@@ -71,3 +71,9 @@
     width: 7vh;
     height: 7vh;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .controls-row.is-waiting .controls-row__key {
+        animation: none;
+    }
+}

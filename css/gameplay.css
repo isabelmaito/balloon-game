@@ -282,3 +282,17 @@ body[data-game-state="paused"] .hud-effect::after {
 .balloon[data-effects~="magnet"][data-effects~="doubleCoins"] > .sprite {
     filter: drop-shadow(0 0 1vh var(--magnet)) drop-shadow(0 0 1vh var(--coin-gold));
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .storm-cloud > .sprite::after,
+    .bird > .sprite::before,
+    .power-up > .sprite {
+        animation: none;
+    }
+
+    /* Keep the invulnerable state visible without flashing. */
+    .balloon[data-effects~="invulnerable"] {
+        animation: none;
+        opacity: 0.6;
+    }
+}

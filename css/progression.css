@@ -131,3 +131,17 @@ body[data-sky="storm"] #background::after {
     opacity: 1;
     background: linear-gradient(to bottom, rgba(40, 45, 55, 0.6), rgba(80, 90, 100, 0.3));
 }
+
+@media (prefers-reduced-motion: reduce) {
+    /* Fade only: the banner is shown by its animation, so it cannot be removed. */
+    .level-banner.is-visible {
+        animation-name: level-banner-fade;
+    }
+}
+
+@keyframes level-banner-fade {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
