@@ -21,6 +21,11 @@ main {
     animation: slide-background 7s linear infinite;
 }
 
+body[data-game-state="paused"] #background,
+body[data-game-state="paused"] .sprite {
+    animation-play-state: paused;
+}
+
 @keyframes slide-background {
     from{
         transform: translateX(0)

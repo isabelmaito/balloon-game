@@ -25,6 +25,9 @@ const game = new Game({
 const hud = new Hud({ root: document.getElementById("hud"), events })
 
 keyboard.attach()
+events.on("game:state", (state) => {
+    document.body.dataset.gameState = state
+})
 events.on("game:setup", ({ players }) => hud.setPlayers(players))
 
 const app = new App({ game, screens: new ScreenManager(), events })
