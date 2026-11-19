@@ -83,6 +83,7 @@ export class Game {
         this.isSimulating = simulate
         for (const system of this.systems) system.teardown?.(this)
         this.coins.clear()
+        this.coinSpawner.reset()
         for (const { balloon } of this.players) balloon.destroy()
         this.players = playerSetups.map((setup, index) => this.createPlayer({ ...setup, index }))
         this.handleResize()

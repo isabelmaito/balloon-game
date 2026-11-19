@@ -16,4 +16,18 @@ describe("Spawner", () => {
         spawner.update(2.6)
         assert.equal(count, 3)
     })
+
+    it("restarts the countdown on reset", () => {
+        let count = 0
+        const spawner = new Spawner({
+            spawn: () => count++,
+            minInterval: 1,
+            maxInterval: 1,
+            random: (min) => min,
+        })
+        spawner.update(0.9)
+        spawner.reset()
+        spawner.update(0.9)
+        assert.equal(count, 0)
+    })
 })

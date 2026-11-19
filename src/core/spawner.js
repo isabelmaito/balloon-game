@@ -15,6 +15,11 @@ export class Spawner {
         this.#timeLeft = this.#nextInterval()
     }
 
+    /** Starts a fresh countdown, e.g. when a new match begins. */
+    reset() {
+        this.#timeLeft = this.#nextInterval()
+    }
+
     update(deltaSeconds) {
         this.#timeLeft -= deltaSeconds
         while (this.#timeLeft <= 0) {
