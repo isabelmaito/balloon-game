@@ -1,9 +1,9 @@
 import { COIN } from "../config.js"
 import { viewport as defaultViewport } from "../core/viewport.js"
 import { Coin } from "../entities/coin.js"
-import { GUEST_PLAYER_ID } from "./config.js"
+import { GUEST_PLAYER_ID, GUEST_SMOOTHING_RATE } from "./config.js"
 import { MESSAGE_TYPE, createMessage } from "./protocol.js"
-import { toPixels } from "./snapshot.js"
+import { blendFactor, moveToward, toPixels } from "./snapshot.js"
 
 const sameDirection = (a, b) => a?.x === b?.x && a?.y === b?.y
 
@@ -39,11 +39,12 @@ export class GuestSyncSystem {
         this.#reset()
     }
 
-    update(_deltaSeconds, game) {
+    update(deltaSeconds, game) {
         this.#sendInput(game)
         if (!this.#snapshot) return
-        this.#applyPlayers(game)
-        this.#applyCoins(game)
+        const factor = blendFactor(deltaSeconds, GUEST_SMOOTHING_RATE)
+        this.#applyPlayers(game, factor)
+        this.#applyCoins(game, factor)
     }
 
     #reset() {
@@ -61,23 +62,26 @@ export class GuestSyncSystem {
         this.#send(createMessage(MESSAGE_TYPE.INPUT, { direction }))
     }
 
-    #applyPlayers(game) {
+    #applyPlayers(game, factor) {
         for (const state of this.#snapshot.players) {
             const player = game.players.find(({ id }) => id === state.id)
             if (!player) continue
-            Object.assign(player.balloon, toPixels(state, this.#viewport))
+            moveToward(player.balloon, toPixels(state, this.#viewport), factor)
             if (player.score === state.score) continue
             player.score = state.score
             game.events.emit("score:changed", { player, score: player.score })
         }
     }
 
-    #applyCoins(game) {
+    /** New coins appear right at their position; known ones glide to it. */
+    #applyCoins(game, factor) {
         const visibleIds = new Set()
         for (const state of this.#snapshot.coins) {
             visibleIds.add(state.id)
-            const coin = this.#coins.get(state.id) ?? this.#spawnCoin(state.id, game)
-            Object.assign(coin, toPixels(state, this.#viewport))
+            const target = toPixels(state, this.#viewport)
+            const coin = this.#coins.get(state.id)
+            if (coin) moveToward(coin, target, factor)
+            else Object.assign(this.#spawnCoin(state.id, game), target)
         }
         for (const [id, coin] of this.#coins) {
             if (visibleIds.has(id)) continue

@@ -22,6 +22,12 @@ export const SNAPSHOT_INTERVAL_SECONDS = 1 / SNAPSHOT_RATE
 /** Snapshot coordinates are viewport fractions rounded to this many steps per unit. */
 export const SNAPSHOT_PRECISION = 10000
 
+/**
+ * How fast the guest eases entities toward the latest snapshot, per second.
+ * Higher is snappier; lower hides jitter between snapshots better.
+ */
+export const GUEST_SMOOTHING_RATE = 15
+
 export const HOST_PLAYER_ID = 1
 export const GUEST_PLAYER_ID = 2
 
