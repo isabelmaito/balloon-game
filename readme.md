@@ -81,6 +81,10 @@ npm test
 
 Usa o test runner nativo do Node (`node --test`), sem dependências.
 
+## Contribuindo
+
+Veja [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Versões anteriores
 
 V1:
