@@ -12,6 +12,14 @@ import {
     isValidMessage,
 } from "../src/net/protocol.js"
 
+const PLAYER = { id: 1, x: 0.1, y: 0.4, score: 3, lives: 2, effects: ["shield"] }
+const EMPTY_STATE = { players: [], coins: [], hazards: [], powerUps: [], distance: 0 }
+const HAZARD = { id: 3, kind: "bird", x: 0.9, y: 0.2, w: 0.06, h: 0.12 }
+const POWER_UP = { id: 4, kind: "magnet", x: 0.8, y: 0.5, w: 0.05, h: 0.09 }
+
+/** A state message with some fields replaced, to check their validation. */
+const stateWith = (fields) => ({ type: MESSAGE_TYPE.STATE, ...EMPTY_STATE, ...fields })
+
 const OFFER = { type: SIGNAL_TYPE.OFFER, sdp: "v=0\r\no=- 1 2 IN IP4 127.0.0.1\r\n" }
 
 describe("signaling codes", () => {
@@ -66,10 +74,13 @@ describe("data channel messages", () => {
         createMessage(MESSAGE_TYPE.HELLO, { version: 1 }),
         createMessage(MESSAGE_TYPE.INPUT, { direction: { x: -1, y: 1 } }),
         createMessage(MESSAGE_TYPE.STATE, {
-            players: [{ id: 1, x: 0.1, y: 0.4, score: 3 }],
+            players: [PLAYER, { ...PLAYER, id: 2, lives: 0, effects: [] }],
             coins: [{ id: 7, x: 0.9, y: 0.5 }],
+            hazards: [HAZARD, { ...HAZARD, id: 5, kind: "stormCloud" }],
+            powerUps: [POWER_UP],
+            distance: 321.5,
         }),
-        createMessage(MESSAGE_TYPE.STATE, { players: [], coins: [] }),
+        createMessage(MESSAGE_TYPE.STATE, EMPTY_STATE),
         createMessage(MESSAGE_TYPE.START, { difficulty: "hard" }),
         createMessage(MESSAGE_TYPE.PAUSE, { paused: true }),
         createMessage(MESSAGE_TYPE.OVER, { scores: [{ id: 1, score: 2 }, { id: 2, score: 5 }] }),
@@ -96,13 +107,23 @@ describe("data channel messages", () => {
         "a fractional version": { type: MESSAGE_TYPE.HELLO, version: 1.5 },
         "an input with a fast axis": { type: MESSAGE_TYPE.INPUT, direction: { x: 2, y: 0 } },
         "an input without direction": { type: MESSAGE_TYPE.INPUT },
-        "a state without coins": { type: MESSAGE_TYPE.STATE, players: [] },
-        "a state with a NaN position": {
-            type: MESSAGE_TYPE.STATE,
-            players: [{ id: 1, x: Number.NaN, y: 0, score: 0 }],
-            coins: [],
-        },
-        "a state with a coin without id": { type: MESSAGE_TYPE.STATE, players: [], coins: [{ x: 0, y: 0 }] },
+        "a state without coins": stateWith({ coins: undefined }),
+        "a state with a NaN position": stateWith({ players: [{ ...PLAYER, x: Number.NaN }] }),
+        "a state with a coin without id": stateWith({ coins: [{ x: 0, y: 0 }] }),
+        "a state with a player without lives": stateWith({ players: [{ ...PLAYER, lives: undefined }] }),
+        "a state with negative lives": stateWith({ players: [{ ...PLAYER, lives: -1 }] }),
+        "a state with fractional lives": stateWith({ players: [{ ...PLAYER, lives: 1.5 }] }),
+        "a state with effects that are not a list": stateWith({ players: [{ ...PLAYER, effects: "shield" }] }),
+        "a state with an unknown effect": stateWith({ players: [{ ...PLAYER, effects: ["flying"] }] }),
+        "a state without hazards": stateWith({ hazards: undefined }),
+        "a state with an unknown hazard kind": stateWith({ hazards: [{ ...HAZARD, kind: "shark" }] }),
+        "a state with a hazard without size": stateWith({ hazards: [{ ...HAZARD, w: undefined }] }),
+        "a state with a hazard without id": stateWith({ hazards: [{ ...HAZARD, id: undefined }] }),
+        "a state without power-ups": stateWith({ powerUps: undefined }),
+        "a state with a hazard kind as power-up": stateWith({ powerUps: [{ ...POWER_UP, kind: "bird" }] }),
+        "a state with a power-up of infinite height": stateWith({ powerUps: [{ ...POWER_UP, h: Infinity }] }),
+        "a state without distance": stateWith({ distance: undefined }),
+        "a state with a negative distance": stateWith({ distance: -1 }),
         "a start without difficulty": { type: MESSAGE_TYPE.START },
         "a pause with a string flag": { type: MESSAGE_TYPE.PAUSE, paused: "yes" },
         "an over with a negative id": { type: MESSAGE_TYPE.OVER, scores: [{ id: -1, score: 0 }] },

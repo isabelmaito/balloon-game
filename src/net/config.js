@@ -3,7 +3,7 @@ import { DEFAULT_BINDINGS } from "../input/bindings.js"
 /** Settings for the peer-to-peer online mode. */
 
 /** Bumped whenever the message format changes, so mismatched builds refuse to play. */
-export const PROTOCOL_VERSION = 1
+export const PROTOCOL_VERSION = 2
 
 /** Public STUN server used to discover each peer's public address. No TURN relay. */
 export const RTC_CONFIG = Object.freeze({

@@ -1,3 +1,7 @@
+import { POWER_UPS } from "../config.js"
+import { HAZARD_KIND } from "../entities/hazard.js"
+import { EFFECT } from "../game/effect-names.js"
+
 /**
  * Pure wire format of the online mode: signaling codes exchanged by hand and
  * messages sent over the data channel. No browser API besides base64 is used,
@@ -78,23 +82,36 @@ export const MESSAGE_TYPE = Object.freeze({
 })
 
 const AXIS_VALUES = new Set([-1, 0, 1])
+const HAZARD_KINDS = new Set(Object.values(HAZARD_KIND))
+const POWER_UP_KINDS = new Set(Object.keys(POWER_UPS))
+const EFFECT_NAMES = new Set(Object.values(EFFECT))
 
 const isAxis = (value) => AXIS_VALUES.has(value)
 const isId = (value) => Number.isInteger(value) && value >= 0
+const isCount = isId
 const isNumber = (value) => Number.isFinite(value)
+const isDistance = (value) => isNumber(value) && value >= 0
 const isListOf = (value, isItem) => Array.isArray(value) && value.every(isItem)
 
 const isDirection = (value) => isObject(value) && isAxis(value.x) && isAxis(value.y)
 const isPosition = (value) => isObject(value) && isNumber(value.x) && isNumber(value.y)
+const isBox = (value) => isPosition(value) && isNumber(value.w) && isNumber(value.h)
 const isScore = (value) => isObject(value) && isId(value.id) && isNumber(value.score)
+const isEffectName = (value) => EFFECT_NAMES.has(value)
 const isPlayerState = (value) => isPosition(value) && isScore(value)
+    && isCount(value.lives) && isListOf(value.effects, isEffectName)
 const isCoinState = (value) => isPosition(value) && isId(value.id)
+const isHazardState = (value) => isBox(value) && isId(value.id) && HAZARD_KINDS.has(value.kind)
+const isPowerUpState = (value) => isBox(value) && isId(value.id) && POWER_UP_KINDS.has(value.kind)
 
 const VALIDATORS = Object.freeze({
     [MESSAGE_TYPE.HELLO]: (message) => Number.isInteger(message.version),
     [MESSAGE_TYPE.INPUT]: (message) => isDirection(message.direction),
     [MESSAGE_TYPE.STATE]: (message) => isListOf(message.players, isPlayerState)
-        && isListOf(message.coins, isCoinState),
+        && isListOf(message.coins, isCoinState)
+        && isListOf(message.hazards, isHazardState)
+        && isListOf(message.powerUps, isPowerUpState)
+        && isDistance(message.distance),
     [MESSAGE_TYPE.START]: (message) => typeof message.difficulty === "string",
     [MESSAGE_TYPE.PAUSE]: (message) => typeof message.paused === "boolean",
     [MESSAGE_TYPE.OVER]: (message) => isListOf(message.scores, isScore),
