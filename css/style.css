@@ -152,3 +152,16 @@ body[data-game-state="paused"] .sprite {
     border-radius: 1vh;
     font: 2.4vh "Trebuchet MS", sans-serif;
 }
+
+.button--primary {
+    min-width: 40vh;
+    padding: 2vh 5vh;
+    font-size: 4vh;
+}
+
+.button--secondary {
+    min-width: 26vh;
+    padding: 1vh 3vh;
+    font-size: 2.6vh;
+    background: #fff3c4;
+}
