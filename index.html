@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./css/progress.css">
     <link rel="stylesheet" href="./css/skins.css">
     <link rel="stylesheet" href="./css/controls.css">
+    <link rel="stylesheet" href="./css/online.css">
     <title>Balloon Game</title>
 </head>
 <body>
@@ -27,6 +28,8 @@
             <button class="button" data-action="achievements" data-i18n="progress.menu.achievements"></button>
             <div class="player-setup" data-role="player-setup"></div>
             <button class="button" data-action="controls" data-i18n="controls.open"></button>
+            <button class="button" data-action="online" data-i18n="online.menu"></button>
+            <p class="online-notice" data-role="online-notice" role="status" hidden></p>
             <label class="field">
                 <span data-i18n="menu.language"></span>
                 <select id="language-picker" class="select"></select>
@@ -80,6 +83,25 @@
                 <button class="button button--danger" data-action="progress-reset-confirm" data-i18n="progress.reset.confirm"></button>
                 <button class="button" data-action="progress-reset-cancel" data-i18n="progress.reset.cancel"></button>
             </div>
+        <section class="screen online" data-screen="online" aria-labelledby="online-title">
+            <h2 id="online-title" class="screen-title" data-i18n="online.title"></h2>
+            <div class="online-roles" data-role="online-roles">
+                <button class="button" data-action="online-host" data-i18n="online.host"></button>
+                <button class="button" data-action="online-join" data-i18n="online.join"></button>
+            </div>
+            <div class="online-code" data-role="online-local" hidden>
+                <label for="online-local-code" data-i18n="online.yourCode"></label>
+                <textarea id="online-local-code" class="online-textarea" readonly></textarea>
+                <button class="button button--small" data-action="online-copy" data-i18n="online.copy"></button>
+            </div>
+            <div class="online-code" data-role="online-remote" hidden>
+                <label for="online-remote-code" data-role="online-remote-label"></label>
+                <textarea id="online-remote-code" class="online-textarea" spellcheck="false"></textarea>
+                <button class="button button--small" data-action="online-connect" data-i18n="online.connect"></button>
+            </div>
+            <p class="online-status" data-role="online-status" role="status"></p>
+            <button class="button" data-action="online-start" data-i18n="online.start" hidden></button>
+            <button class="button" data-action="online-back" data-i18n="online.back"></button>
         </section>
     </main>
     

@@ -1,0 +1,73 @@
+/* Online mode: host/join screen and menu notice. */
+
+.online {
+    overflow-y: auto;
+}
+
+.online-roles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2vh;
+}
+
+.online-roles[hidden],
+.online-code[hidden],
+.online-notice[hidden],
+.online [data-action][hidden] {
+    display: none;
+}
+
+.online-code {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1vh;
+    width: min(90vw, 80vh);
+    font-size: 2.4vh;
+}
+
+.online-textarea {
+    box-sizing: border-box;
+    width: 100%;
+    height: 12vh;
+    padding: 1vh;
+    border: 0.3vh solid #6b4a00;
+    border-radius: 1vh;
+    font: 1.6vh monospace;
+    word-break: break-all;
+    resize: none;
+}
+
+.online-textarea[readonly] {
+    background: #fff8dc;
+}
+
+.button--small {
+    min-width: 0;
+    padding: 0.8vh 2.5vh;
+    font-size: 2.4vh;
+}
+
+.online-status {
+    min-height: 3vh;
+    margin: 0;
+    max-width: 80vw;
+    font-size: 2.6vh;
+}
+
+.online-status[data-tone="error"],
+.online-notice {
+    color: #ffd0d0;
+    font-weight: bold;
+}
+
+.online-notice {
+    margin: 0;
+    font-size: 2.6vh;
+}
+
+/* Only the host can start a rematch from the results screen. */
+body[data-online-role="guest"] [data-screen="game-over"] [data-action="play"] {
+    display: none;
+}
