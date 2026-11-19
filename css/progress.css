@@ -138,3 +138,59 @@
     height: 1.2vh;
     accent-color: var(--progress-gold);
 }
+
+.toast-region {
+    position: fixed;
+    top: 2vh;
+    right: 2vw;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1vh;
+    pointer-events: none;
+}
+
+.toast {
+    display: grid;
+    gap: 0.3vh;
+    min-width: 28vh;
+    padding: 1.2vh 2vh;
+    border: 0.4vh solid var(--progress-shadow);
+    border-radius: 1.5vh;
+    background: var(--progress-gold);
+    color: var(--progress-ink);
+    font-family: "Trebuchet MS", sans-serif;
+    box-shadow: 0 0.6vh 1.5vh rgba(0, 0, 0, 0.3);
+    animation: toast-enter 0.35s ease-out;
+}
+
+.toast__title {
+    font-size: 1.8vh;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.toast__name {
+    font-size: 2.6vh;
+}
+
+.toast--leaving {
+    animation: toast-leave 0.3s ease-in forwards;
+}
+
+@keyframes toast-enter {
+    from { transform: translateX(120%); opacity: 0 }
+    to { transform: translateX(0); opacity: 1 }
+}
+
+@keyframes toast-leave {
+    to { transform: translateX(120%); opacity: 0 }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast,
+    .toast--leaving {
+        animation: none;
+    }
+}
