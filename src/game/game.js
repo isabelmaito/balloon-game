@@ -5,6 +5,8 @@ import { Spawner } from "../core/spawner.js"
 import { viewport } from "../core/viewport.js"
 import { Balloon } from "../entities/balloon.js"
 import { Coin } from "../entities/coin.js"
+import { DEFAULT_BINDINGS } from "../input/bindings.js"
+import { Controls } from "../input/controls.js"
 import { intersects, shrink } from "../utils/collision.js"
 import { randomBetween } from "../utils/math.js"
 
@@ -21,6 +23,7 @@ export class Game {
             maxInterval: COIN.maxSpawnInterval,
         })
         this.balloon = this.createBalloon()
+        this.controls = new Controls(keyboard, DEFAULT_BINDINGS.arrows)
         this.handleResize = this.handleResize.bind(this)
     }
 
@@ -58,16 +61,8 @@ export class Game {
         }))
     }
 
-    readDirection() {
-        const { keyboard } = this
-        return {
-            x: Number(keyboard.isPressed("ArrowRight")) - Number(keyboard.isPressed("ArrowLeft")),
-            y: Number(keyboard.isPressed("ArrowDown")) - Number(keyboard.isPressed("ArrowUp")),
-        }
-    }
-
     update(deltaSeconds) {
-        this.balloon.steer(this.readDirection())
+        this.balloon.steer(this.controls.direction)
         this.balloon.update(deltaSeconds)
         this.balloon.keepInside(viewport)
 
