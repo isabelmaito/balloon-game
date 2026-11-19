@@ -30,14 +30,8 @@ main {
     }
 }
 
-#balloon {
-    width: 20vh;
-    height: 20vh;
-    background: url("../images/Drifblim.png");
-    background-size: 20vh 20vh;
-    position: absolute; 
-    top: 40vh;
-    left: 10vw;
+.balloon > .sprite {
+    background-image: url("../images/Drifblim.png");
     animation: float-animation 3s infinite;
 }
 

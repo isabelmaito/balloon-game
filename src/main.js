@@ -1,20 +1,24 @@
-import { BALLOON_SPEED } from "./config.js"
+import { BALLOON } from "./config.js"
 import { GameLoop } from "./core/game-loop.js"
 import { Keyboard } from "./core/keyboard.js"
+import { Balloon } from "./entities/balloon.js"
 
-const mainDiv = document.getElementById("main")
-const balloon = document.getElementById("balloon")
+const playfield = document.getElementById("main")
 const keyboard = new Keyboard()
+const viewportHeight = window.innerHeight
 
-function moveBalloon(deltaSeconds) {
-    const computedStyle = getComputedStyle(balloon)
-    const y = parseFloat(computedStyle.top)
-    const x = parseFloat(computedStyle.left)
-    const step = BALLOON_SPEED * window.innerHeight * deltaSeconds
-    if (keyboard.isPressed("ArrowUp")) balloon.style.top = (y - step) + "px"
-    if (keyboard.isPressed("ArrowDown")) balloon.style.top = (y + step) + "px"
-    if (keyboard.isPressed("ArrowLeft")) balloon.style.left = (x - step) + "px"
-    if (keyboard.isPressed("ArrowRight")) balloon.style.left = (x + step) + "px"
+const balloon = new Balloon({
+    x: window.innerWidth * BALLOON.startXRatio,
+    y: viewportHeight * BALLOON.startYRatio,
+    size: viewportHeight * BALLOON.sizeRatio,
+    speed: viewportHeight * BALLOON.speedRatio,
+})
+playfield.appendChild(balloon.element)
+
+function readDirection() {
+    const x = Number(keyboard.isPressed("ArrowRight")) - Number(keyboard.isPressed("ArrowLeft"))
+    const y = Number(keyboard.isPressed("ArrowDown")) - Number(keyboard.isPressed("ArrowUp"))
+    return { x, y }
 }
 
 function spawnCoin() {
@@ -22,10 +26,16 @@ function spawnCoin() {
     coin.classList.add("coin")
     coin.style.left = "100vw"
     coin.style.top = (Math.random() * 90) + "vh"
-    mainDiv.appendChild(coin)
+    playfield.appendChild(coin)
 }
 
-const loop = new GameLoop(moveBalloon)
+function update(deltaSeconds) {
+    balloon.steer(readDirection())
+    balloon.update(deltaSeconds)
+    balloon.render()
+}
+
+const loop = new GameLoop(update)
 
 keyboard.attach()
 loop.start()
