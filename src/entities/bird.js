@@ -1,4 +1,4 @@
-import { Hazard } from "./hazard.js"
+import { HAZARD_KIND, Hazard } from "./hazard.js"
 
 const FULL_TURN = Math.PI * 2
 
@@ -8,7 +8,7 @@ export class Bird extends Hazard {
     #elapsed = 0
 
     constructor({ x, y, size, speed, bobAmplitude, bobFrequency }) {
-        super({ x, y, width: size, height: size, speed, className: "bird" })
+        super({ x, y, width: size, height: size, speed, kind: HAZARD_KIND.BIRD, className: "bird" })
         this.#baseY = y
         this.bobAmplitude = bobAmplitude
         this.bobFrequency = bobFrequency
