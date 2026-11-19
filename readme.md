@@ -53,6 +53,34 @@ A partida roda no navegador de quem hospeda; o outro navegador envia só os coma
 e recebe o estado do jogo. Pausar de um lado pausa os dois. Redes muito restritivas
 (alguns NATs corporativos) podem impedir a conexão, porque o jogo usa apenas STUN.
 
+## Estrutura do projeto
+
+```
+index.html        telas e HUD
+css/              estilos por funcionalidade
+src/main.js       ponto de entrada, monta as dependências
+src/app.js        fluxo de telas
+src/core/         loop, teclado, eventos, armazenamento
+src/entities/     balão, moedas, obstáculos, power-ups
+src/game/         regras da partida e sistemas
+src/progression/  dificuldade e fases
+src/progress/     estatísticas, recordes e conquistas
+src/multiplayer/  multijogador local, skins e controles
+src/net/          multijogador online
+src/i18n/         traduções
+tests/            testes unitários
+```
+
+Os detalhes de arquitetura estão em [docs/architecture.md](docs/architecture.md).
+
+## Testes
+
+```bash
+npm test
+```
+
+Usa o test runner nativo do Node (`node --test`), sem dependências.
+
 ## Versões anteriores
 
 V1:
