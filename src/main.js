@@ -1,18 +1,20 @@
-import { BALLOON_SPEED, FRAME_DURATION_MS } from "./config.js"
+import { BALLOON_SPEED } from "./config.js"
+import { GameLoop } from "./core/game-loop.js"
 import { Keyboard } from "./core/keyboard.js"
 
 const mainDiv = document.getElementById("main")
 const balloon = document.getElementById("balloon")
 const keyboard = new Keyboard()
 
-function moveBalloon() {
+function moveBalloon(deltaSeconds) {
     const computedStyle = getComputedStyle(balloon)
-    const y = parseInt(computedStyle.top)
-    const x = parseInt(computedStyle.left)
-    if (keyboard.isPressed("ArrowUp")) balloon.style.top = (y - BALLOON_SPEED) + "px"
-    if (keyboard.isPressed("ArrowDown")) balloon.style.top = (y + BALLOON_SPEED) + "px"
-    if (keyboard.isPressed("ArrowLeft")) balloon.style.left = (x - BALLOON_SPEED) + "px"
-    if (keyboard.isPressed("ArrowRight")) balloon.style.left = (x + BALLOON_SPEED) + "px"
+    const y = parseFloat(computedStyle.top)
+    const x = parseFloat(computedStyle.left)
+    const step = BALLOON_SPEED * window.innerHeight * deltaSeconds
+    if (keyboard.isPressed("ArrowUp")) balloon.style.top = (y - step) + "px"
+    if (keyboard.isPressed("ArrowDown")) balloon.style.top = (y + step) + "px"
+    if (keyboard.isPressed("ArrowLeft")) balloon.style.left = (x - step) + "px"
+    if (keyboard.isPressed("ArrowRight")) balloon.style.left = (x + step) + "px"
 }
 
 function spawnCoin() {
@@ -23,11 +25,8 @@ function spawnCoin() {
     mainDiv.appendChild(coin)
 }
 
-function gameLoop() {
-    moveBalloon()
-    setTimeout(gameLoop, FRAME_DURATION_MS)
-}
+const loop = new GameLoop(moveBalloon)
 
 keyboard.attach()
-gameLoop()
+loop.start()
 spawnCoin()

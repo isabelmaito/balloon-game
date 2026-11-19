@@ -1,2 +1,2 @@
-export const BALLOON_SPEED = 5
-export const FRAME_DURATION_MS = 1000 / 60
+/** Balloon speed in viewport heights per second. */
+export const BALLOON_SPEED = 0.5
