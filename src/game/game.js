@@ -79,7 +79,9 @@ export class Game {
         for (const coin of this.coins.items) {
             if (coin.isAlive && intersects(balloonHitbox, coin.bounds)) {
                 coin.destroy()
+                player.addScore(coin.value)
                 this.events.emit("coin:collected", { player, coin })
+                this.events.emit("score:changed", { player, score: player.score })
             }
         }
         this.coins.prune()
