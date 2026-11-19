@@ -1,34 +1,18 @@
 import { BALLOON_SPEED, FRAME_DURATION_MS } from "./config.js"
+import { Keyboard } from "./core/keyboard.js"
 
 const mainDiv = document.getElementById("main")
 const balloon = document.getElementById("balloon")
-let pressUp = false
-let pressDown = false
-let pressLeft = false
-let pressRight = false
-
-function handleKeyDown(event) {
-    if (event.key === "ArrowUp") pressUp = true
-    if (event.key === "ArrowDown") pressDown = true
-    if (event.key === "ArrowLeft") pressLeft = true
-    if (event.key === "ArrowRight") pressRight = true
-}
-
-function handleKeyUp(event) {
-    if (event.key === "ArrowUp") pressUp = false
-    if (event.key === "ArrowDown") pressDown = false
-    if (event.key === "ArrowLeft") pressLeft = false
-    if (event.key === "ArrowRight") pressRight = false
-}
+const keyboard = new Keyboard()
 
 function moveBalloon() {
     const computedStyle = getComputedStyle(balloon)
     const y = parseInt(computedStyle.top)
     const x = parseInt(computedStyle.left)
-    if (pressUp) balloon.style.top = (y - BALLOON_SPEED) + "px"
-    if (pressDown) balloon.style.top = (y + BALLOON_SPEED) + "px"
-    if (pressLeft) balloon.style.left = (x - BALLOON_SPEED) + "px"
-    if (pressRight) balloon.style.left = (x + BALLOON_SPEED) + "px"
+    if (keyboard.isPressed("ArrowUp")) balloon.style.top = (y - BALLOON_SPEED) + "px"
+    if (keyboard.isPressed("ArrowDown")) balloon.style.top = (y + BALLOON_SPEED) + "px"
+    if (keyboard.isPressed("ArrowLeft")) balloon.style.left = (x - BALLOON_SPEED) + "px"
+    if (keyboard.isPressed("ArrowRight")) balloon.style.left = (x + BALLOON_SPEED) + "px"
 }
 
 function spawnCoin() {
@@ -44,7 +28,6 @@ function gameLoop() {
     setTimeout(gameLoop, FRAME_DURATION_MS)
 }
 
-document.addEventListener("keydown", handleKeyDown)
-document.addEventListener("keyup", handleKeyUp)
+keyboard.attach()
 gameLoop()
 spawnCoin()
