@@ -214,3 +214,71 @@ body[data-game-state="paused"] .balloon {
         radial-gradient(circle at 66% 62%, var(--coin-gold) 0 30%, var(--coin-edge) 31% 37%, transparent 38%),
         radial-gradient(circle at 36% 38%, var(--coin-gold) 0 30%, var(--coin-edge) 31% 37%, transparent 38%);
 }
+
+/* HUD effect chips: an icon with a bar that drains until the effect ends. */
+.hud-effects {
+    display: flex;
+    gap: 1vh;
+    margin: 0 0 0 1vh;
+    padding: 0;
+    list-style: none;
+}
+
+.hud-effect {
+    position: relative;
+    box-sizing: border-box;
+    width: 3.6vh;
+    height: 3.6vh;
+    padding: 0.5vh;
+    border-radius: 1vh;
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.hud-effect .effect-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.hud-effect.is-timed::after {
+    content: "";
+    position: absolute;
+    left: 10%;
+    bottom: -0.7vh;
+    width: 80%;
+    height: 0.4vh;
+    border-radius: 0.2vh;
+    background: #fff8dc;
+    transform-origin: left;
+    animation: effect-drain var(--effect-time-left) linear forwards;
+}
+
+body[data-game-state="paused"] .hud-effect::after {
+    animation-play-state: paused;
+}
+
+@keyframes effect-drain {
+    to { transform: scaleX(0) }
+}
+
+/* Balloon auras for active power-ups. */
+.balloon[data-effects~="shield"]::after {
+    content: "";
+    position: absolute;
+    inset: -8%;
+    border: 0.5vh solid rgba(77, 163, 255, 0.8);
+    border-radius: 50%;
+    box-shadow: 0 0 2vh rgba(77, 163, 255, 0.7), inset 0 0 2vh rgba(77, 163, 255, 0.4);
+    pointer-events: none;
+}
+
+.balloon[data-effects~="magnet"] > .sprite {
+    filter: drop-shadow(0 0 1vh var(--magnet));
+}
+
+.balloon[data-effects~="doubleCoins"] > .sprite {
+    filter: drop-shadow(0 0 1vh var(--coin-gold));
+}
+
+.balloon[data-effects~="magnet"][data-effects~="doubleCoins"] > .sprite {
+    filter: drop-shadow(0 0 1vh var(--magnet)) drop-shadow(0 0 1vh var(--coin-gold));
+}
