@@ -94,3 +94,37 @@
         repeating-linear-gradient(90deg, var(--wicker-light) 0 12%, var(--wicker-dark) 0 16%) left bottom / 100% 40% no-repeat;
     border-radius: 0 0 20% 20% / 0 0 12% 12%;
 }
+
+/* Heart: two round lobes over a triangle, tied to a string. */
+.balloon--heart {
+    --heart-light: #ff8fc2;
+    --heart-main: #e83e8c;
+}
+
+.balloon--heart > .sprite::before {
+    inset: 0;
+    background:
+        radial-gradient(ellipse 7% 9% at 28% 28%, var(--highlight) 60%, transparent 100%),
+        radial-gradient(ellipse 14% 14% at 32% 32%, var(--heart-light), transparent 100%),
+        radial-gradient(ellipse 20% 20% at 30% 34%, var(--heart-main) 97%, transparent 100%),
+        radial-gradient(ellipse 20% 20% at 70% 34%, var(--heart-main) 97%, transparent 100%),
+        radial-gradient(ellipse 12% 14% at 50% 48%, var(--heart-main) 97%, transparent 100%),
+        conic-gradient(from -45deg at 50% 100%, var(--heart-main) 90deg, transparent 0) 50% 73% / 68% 34% no-repeat;
+}
+
+/* Star: a five-pointed golden star. */
+.balloon--star {
+    --star-light: #fff4a3;
+    --star-main: #f7c21b;
+    --star-shade: #c98a00;
+    --string-length: 54%;
+}
+
+.balloon--star > .sprite::before {
+    top: 0;
+    left: 6%;
+    width: 88%;
+    height: 68%;
+    background: radial-gradient(circle at 45% 40%, var(--star-light), var(--star-main) 45%, var(--star-shade));
+    clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
