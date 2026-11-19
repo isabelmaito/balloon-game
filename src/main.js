@@ -1,76 +1,50 @@
-const main_div = document.getElementById("main")
+import { BALLOON_SPEED, FRAME_DURATION_MS } from "./config.js"
+
+const mainDiv = document.getElementById("main")
 const balloon = document.getElementById("balloon")
-const velocidade = 5
-let press_up = false
-let press_down = false
-let press_left = false
-let press_right = false
+let pressUp = false
+let pressDown = false
+let pressLeft = false
+let pressRight = false
 
-function handleKeyDown(event){
-        
-    if(event.key=="ArrowUp"){
-        press_up=true
-    }
-    if(event.key=="ArrowDown"){
-        press_down=true
-    }
-    if(event.key=="ArrowLeft"){
-        press_left=true
-    }
-    if(event.key=="ArrowRight"){
-        press_right=true
-    }
+function handleKeyDown(event) {
+    if (event.key === "ArrowUp") pressUp = true
+    if (event.key === "ArrowDown") pressDown = true
+    if (event.key === "ArrowLeft") pressLeft = true
+    if (event.key === "ArrowRight") pressRight = true
 }
 
-function handleKeyUp(event){
-        
-    if(event.key=="ArrowUp"){
-        press_up=false
-    }
-    if(event.key=="ArrowDown"){
-        press_down=false
-    }
-    if(event.key=="ArrowLeft"){
-        press_left=false
-    }
-    if(event.key=="ArrowRight"){
-        press_right=false
-    }
+function handleKeyUp(event) {
+    if (event.key === "ArrowUp") pressUp = false
+    if (event.key === "ArrowDown") pressDown = false
+    if (event.key === "ArrowLeft") pressLeft = false
+    if (event.key === "ArrowRight") pressRight = false
 }
 
-function moveBalloon(){
-    const computed_style = getComputedStyle(balloon)
-    const y = parseInt(computed_style.top)
-    const x = parseInt(computed_style.left)
-    if(press_up==true){
-        balloon.style.top = (y-velocidade) + "px"
-    }
-    if(press_down==true){
-        balloon.style.top = (y+velocidade) + "px"
-    }
-    if(press_left==true){
-        balloon.style.left = (x-velocidade) + "px"
-    }
-    if(press_right==true){
-        balloon.style.left = (x+velocidade) + "px"
-    }
+function moveBalloon() {
+    const computedStyle = getComputedStyle(balloon)
+    const y = parseInt(computedStyle.top)
+    const x = parseInt(computedStyle.left)
+    if (pressUp) balloon.style.top = (y - BALLOON_SPEED) + "px"
+    if (pressDown) balloon.style.top = (y + BALLOON_SPEED) + "px"
+    if (pressLeft) balloon.style.left = (x - BALLOON_SPEED) + "px"
+    if (pressRight) balloon.style.left = (x + BALLOON_SPEED) + "px"
 }
 
-function spawnCoin(){
-    const coin = document.createElement("div");
-    coin.classList.add("coin");
-    coin.style.left="100vw"
-    coin.style.top=(Math.random()*90)+"vh"
-    main_div.appendChild(coin)
-
+function spawnCoin() {
+    const coin = document.createElement("div")
+    coin.classList.add("coin")
+    coin.style.left = "100vw"
+    coin.style.top = (Math.random() * 90) + "vh"
+    mainDiv.appendChild(coin)
 }
 
-function gameLoop(){
+function gameLoop() {
     moveBalloon()
-    setTimeout(gameLoop,parseInt(1000/60))
+    setTimeout(gameLoop, FRAME_DURATION_MS)
 }
 
-document.addEventListener("keydown",handleKeyDown)
-document.addEventListener("keyup",handleKeyUp)
+document.addEventListener("keydown", handleKeyDown)
+document.addEventListener("keyup", handleKeyUp)
 gameLoop()
 spawnCoin()
