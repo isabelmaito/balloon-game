@@ -10,6 +10,7 @@ import { AchievementToasts } from "./ui/achievement-toasts.js"
 import { AchievementsView } from "./ui/achievements-view.js"
 import { HighScoresView } from "./ui/high-scores-view.js"
 import { mountRecordBadge } from "./ui/record-badge.js"
+import { ResetPrompt } from "./ui/reset-prompt.js"
 
 /**
  * Plugs persistent progress (stats, high scores, achievements) into the game.
@@ -40,9 +41,19 @@ export function installProgress({ app, game, events, storage, root = document })
             app.screens.show(screen)
         })
     }
-    app.registerAction("progress-back", () => app.showMenu())
-    i18n.onChange(() => {
-        for (const view of views.values()) view.render()
+    const resetPrompt = new ResetPrompt({ root, onConfirm: () => service.reset() })
+    app.registerAction("progress-back", () => {
+        resetPrompt.close()
+        app.showMenu()
     })
+    app.registerAction("progress-reset", () => resetPrompt.ask())
+    app.registerAction("progress-reset-confirm", () => resetPrompt.confirm())
+    app.registerAction("progress-reset-cancel", () => resetPrompt.cancel())
+
+    const renderViews = () => {
+        for (const view of views.values()) view.render()
+    }
+    i18n.onChange(renderViews)
+    events.on("progress:reset", renderViews)
     return service
 }

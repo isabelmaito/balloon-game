@@ -62,6 +62,12 @@
                 <ul class="achievements" data-role="achievements"></ul>
             </div>
             <button class="button" data-action="progress-back" data-i18n="progress.back"></button>
+            <button class="button button--danger" data-action="progress-reset" data-i18n="progress.reset"></button>
+            <div class="reset-confirm" data-role="progress-reset-confirm" role="group" aria-labelledby="reset-question" hidden>
+                <p id="reset-question" class="reset-confirm__question" data-i18n="progress.reset.question"></p>
+                <button class="button button--danger" data-action="progress-reset-confirm" data-i18n="progress.reset.confirm"></button>
+                <button class="button" data-action="progress-reset-cancel" data-i18n="progress.reset.cancel"></button>
+            </div>
         </section>
     </main>
     

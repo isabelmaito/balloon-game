@@ -139,6 +139,36 @@
     accent-color: var(--progress-gold);
 }
 
+.button--danger {
+    border-color: #5c1010;
+    background: #e06a5a;
+    color: #fff;
+}
+
+.button--danger:hover,
+.button--danger:focus-visible {
+    background: #ec8a7d;
+}
+
+.button[hidden],
+.reset-confirm[hidden] {
+    display: none;
+}
+
+.reset-confirm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5vh;
+    max-width: min(90vw, 80vh);
+}
+
+.reset-confirm__question {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 2.6vh;
+}
+
 .toast-region {
     position: fixed;
     top: 2vh;
