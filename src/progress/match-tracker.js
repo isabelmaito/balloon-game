@@ -3,6 +3,8 @@ const DEFAULT_COIN_VALUE = 1
 
 const readNumber = (payload, field) => (typeof payload === "number" ? payload : payload?.[field])
 
+export const coinValue = (coin) => coin?.value ?? DEFAULT_COIN_VALUE
+
 /**
  * Game system that summarizes the running match for the progress feature.
  * Time comes from the loop's delta, so pauses are not counted. Level and lives
@@ -15,7 +17,7 @@ export class MatchTracker {
     constructor({ events }) {
         this.#reset()
         events.on("coin:collected", ({ coin }) => {
-            this.coins += coin?.value ?? DEFAULT_COIN_VALUE
+            this.coins += coinValue(coin)
         })
         events.on("level:changed", (payload) => {
             const level = readNumber(payload, "level")
