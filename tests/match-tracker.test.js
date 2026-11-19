@@ -40,6 +40,13 @@ describe("MatchTracker", () => {
         assert.equal(tracker.livesLost, 1)
     })
 
+    it("counts the first life lost after setup", () => {
+        const { events, tracker } = createTracker()
+        tracker.setup({ players: [{ id: 1, lives: 3 }], difficulty: { id: "normal" } })
+        events.emit("lives:changed", { player: { id: 1 }, lives: 2 })
+        assert.equal(tracker.livesLost, 1)
+    })
+
     it("keeps the highest level reached", () => {
         const { events, tracker } = createTracker()
         events.emit("level:changed", { level: { id: "night" }, number: 3, isFirst: false })

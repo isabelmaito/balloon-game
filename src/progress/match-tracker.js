@@ -29,6 +29,10 @@ export class MatchTracker {
     setup(game) {
         this.#game = game
         this.#reset()
+        // Seed starting lives so the very first hit already counts as a loss.
+        for (const { id, lives } of game.players) {
+            if (Number.isFinite(lives)) this.#lives.set(id, lives)
+        }
     }
 
     update(deltaSeconds) {
