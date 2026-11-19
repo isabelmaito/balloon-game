@@ -1,10 +1,4 @@
-const SECONDS_PER_MINUTE = 60
-
-/** How an achievement's progress is counted, used to format it. */
-export const PROGRESS_UNIT = Object.freeze({
-    COUNT: "count",
-    SECONDS: "seconds",
-})
+import { PROGRESS_UNIT, SECONDS_PER_MINUTE } from "../units.js"
 
 /**
  * Builds a catalog entry. `measure(stats)` reads how far the player got;
