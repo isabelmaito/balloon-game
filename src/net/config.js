@@ -15,6 +15,7 @@ export const ICE_GATHERING_TIMEOUT_MS = 5000
 
 /** Host broadcasts this many snapshots per second. */
 export const SNAPSHOT_RATE = 20
+export const SNAPSHOT_INTERVAL_SECONDS = 1 / SNAPSHOT_RATE
 
 /** Snapshot coordinates are viewport fractions rounded to this many steps per unit. */
 export const SNAPSHOT_PRECISION = 10000
