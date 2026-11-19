@@ -11,6 +11,54 @@
     display: none;
 }
 
+/* Controls screen: one card per player, one row per action. */
+
+.controls-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3vh;
+}
+
+.controls-player {
+    min-width: 34vh;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.controls-player__name {
+    margin: 0 0 1.5vh;
+    font-size: 3.2vh;
+    color: #fff8dc;
+}
+
+.controls-row {
+    display: grid;
+    grid-template-columns: 1fr 9vh auto;
+    align-items: center;
+    gap: 1.5vh;
+    padding: 0.6vh 0;
+    font-size: 2.6vh;
+    text-align: left;
+}
+
+.controls-row__key {
+    padding: 0.5vh 1vh;
+    border: 0.3vh solid #6b4a00;
+    border-radius: 1vh;
+    background: #fff8dc;
+    color: #4a3300;
+    font: bold 2.4vh "Trebuchet MS", sans-serif;
+    text-align: center;
+}
+
+.controls-status {
+    min-height: 3vh;
+    margin: 0;
+    font-size: 2.6vh;
+}
+
 .skin-preview.entity {
     position: relative;
     width: 7vh;
