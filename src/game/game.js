@@ -62,6 +62,14 @@ export class Game {
         return this
     }
 
+    /** Unplugs a system added with `addSystem`, running its `teardown` first. */
+    removeSystem(system) {
+        if (!this.systems.includes(system)) return this
+        system.teardown?.(this)
+        this.systems = this.systems.filter((item) => item !== system)
+        return this
+    }
+
     /** Clears the field and prepares a fresh match. */
     setup({
         players: playerSetups = [{ id: 1, bindings: DEFAULT_BINDINGS.arrows }],
