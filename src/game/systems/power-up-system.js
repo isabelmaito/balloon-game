@@ -26,7 +26,7 @@ export class PowerUpSystem extends ScrollingSpawnSystem {
             x: viewport.width,
             y: randomBetween(0, viewport.height - size),
             size,
-            speed: viewport.height * POWER_UP.speedRatio * game.difficulty.speedMultiplier,
+            speed: viewport.height * POWER_UP.speedRatio * game.speedMultiplier,
             kind: pickRandom(POWER_UP_KINDS),
         })
     }

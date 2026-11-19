@@ -45,11 +45,11 @@ export class HazardSystem extends ScrollingSpawnSystem {
     }
 
     spawnRate(game) {
-        return game.difficulty.spawnMultiplier
+        return game.spawnMultiplier
     }
 
     createEntity(game) {
-        return pickRandom(HAZARD_FACTORIES)(game.difficulty.speedMultiplier)
+        return pickRandom(HAZARD_FACTORIES)(game.speedMultiplier)
     }
 
     onTouch(player, hazard) {
