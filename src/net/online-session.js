@@ -30,6 +30,8 @@ export class OnlineSession {
     #app
     #game
     #events
+    #survival
+    #levels
     #peer = null
     #system = null
     #remoteControls = new RemoteControls()
@@ -37,10 +39,16 @@ export class OnlineSession {
     #lastGameState = null
     #send = (message) => this.#peer?.send(message)
 
-    constructor({ app, game, events }) {
+    /**
+     * `survival` holds the `hazards` and `powerUps` systems and `levels` the
+     * `LevelSystem`; the host reads them for snapshots and the guest follows them.
+     */
+    constructor({ app, game, events, survival, levels }) {
         this.#app = app
         this.#game = game
         this.#events = events
+        this.#survival = survival
+        this.#levels = levels
         this.role = null
         this.isConnected = false
         this.#handlers = {
@@ -132,9 +140,14 @@ export class OnlineSession {
         }
         if (this.isConnected) return
         this.isConnected = true
-        this.#system = this.isHost ? new HostSyncSystem({ send: this.#send }) : new GuestSyncSystem({ send: this.#send })
+        this.#system = this.isHost ? this.#createHostSync() : new GuestSyncSystem({ send: this.#send })
         this.#game.addSystem(this.#system)
         this.#events.emit("online:connected", { role: this.role })
+    }
+
+    #createHostSync() {
+        const { hazards, powerUps } = this.#survival
+        return new HostSyncSystem({ send: this.#send, hazards, powerUps, levels: this.#levels })
     }
 
     #startAsGuest(difficulty) {

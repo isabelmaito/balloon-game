@@ -30,7 +30,7 @@ const game = new Game({
     keyboard,
     events,
 })
-installSurvivalSystems({ game, events })
+const survival = installSurvivalSystems({ game, events })
 
 const hud = new Hud({ root: document.getElementById("hud"), events })
 
@@ -42,8 +42,9 @@ events.on("game:setup", ({ players }) => hud.setPlayers(players))
 mountSurvivalUi({ hud, events })
 
 const app = new App({ game, screens: new ScreenManager(), events })
-mountProgression({ app, settings })
+const { levels } = mountProgression({ app, settings })
 installProgress({ app, game, events, storage })
 installMultiplayer({ app, game, events, settings })
 app.init()
-new OnlineScreen({ app, session: new OnlineSession({ app, game, events }) }).mount()
+const session = new OnlineSession({ app, game, events, survival, levels })
+new OnlineScreen({ app, session }).mount()
