@@ -11,6 +11,13 @@ import { intersects, shrink } from "../utils/collision.js"
 import { randomBetween } from "../utils/math.js"
 import { Player } from "./player.js"
 
+export const GAME_STATE = Object.freeze({
+    IDLE: "idle",
+    RUNNING: "running",
+    PAUSED: "paused",
+    OVER: "over",
+})
+
 export class Game {
     constructor({ playfield, keyboard, events }) {
         this.playfield = playfield
@@ -24,13 +31,44 @@ export class Game {
             maxInterval: COIN.maxSpawnInterval,
         })
         this.players = [this.createPlayer({ id: 1, bindings: DEFAULT_BINDINGS.arrows })]
+        this.state = GAME_STATE.IDLE
         this.handleResize = this.handleResize.bind(this)
+        window.addEventListener("resize", this.handleResize)
     }
 
     start() {
-        window.addEventListener("resize", this.handleResize)
         this.handleResize()
+        this.#setState(GAME_STATE.RUNNING)
         this.loop.start()
+    }
+
+    pause() {
+        if (this.state !== GAME_STATE.RUNNING) return
+        this.loop.stop()
+        this.#setState(GAME_STATE.PAUSED)
+    }
+
+    resume() {
+        if (this.state !== GAME_STATE.PAUSED) return
+        this.#setState(GAME_STATE.RUNNING)
+        this.loop.start()
+    }
+
+    togglePause() {
+        if (this.state === GAME_STATE.RUNNING) this.pause()
+        else this.resume()
+    }
+
+    end() {
+        if (this.state === GAME_STATE.OVER) return
+        this.loop.stop()
+        this.#setState(GAME_STATE.OVER)
+        this.events.emit("game:over", { players: this.players })
+    }
+
+    #setState(state) {
+        this.state = state
+        this.events.emit("game:state", state)
     }
 
     createPlayer({ id, bindings }) {
