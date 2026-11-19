@@ -40,6 +40,19 @@ servidor estático serve.
 As teclas podem ser trocadas em **Controles**, no menu principal. Esc e P ficam
 reservadas para a pausa.
 
+## Jogando online
+
+A conexão é ponto a ponto (WebRTC). Não existe servidor do jogo: os dois jogadores
+trocam códigos manualmente, por qualquer mensageiro.
+
+1. Quem hospeda clica em **Online → Hospedar** e envia o código gerado.
+2. Quem entra clica em **Online → Entrar**, cola o código e devolve o código de resposta.
+3. Quem hospeda cola a resposta e clica em **Começar**.
+
+A partida roda no navegador de quem hospeda; o outro navegador envia só os comandos
+e recebe o estado do jogo. Pausar de um lado pausa os dois. Redes muito restritivas
+(alguns NATs corporativos) podem impedir a conexão, porque o jogo usa apenas STUN.
+
 ## Versões anteriores
 
 V1:
