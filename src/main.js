@@ -10,7 +10,9 @@ import { mountProgression } from "./progression/index.js"
 import { installProgress } from "./progress/index.js"
 import { installMultiplayer } from "./multiplayer/index.js"
 import { Hud } from "./ui/hud.js"
+import { OnlineSession } from "./net/online-session.js"
 import { mountLanguagePicker } from "./ui/language-picker.js"
+import { OnlineScreen } from "./ui/online-screen.js"
 import { ScreenManager } from "./ui/screen-manager.js"
 
 const settings = new Settings({ storage, defaults: { locale: DEFAULT_LOCALE } })
@@ -40,3 +42,4 @@ mountProgression({ app, settings })
 installProgress({ app, game, events, storage })
 installMultiplayer({ app, game, events, settings })
 app.init()
+new OnlineScreen({ app, session: new OnlineSession({ app, game, events }) }).mount()
