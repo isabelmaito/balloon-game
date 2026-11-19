@@ -1,3 +1,4 @@
+import { normalize } from "../utils/math.js"
 import { Entity } from "./entity.js"
 
 export class Balloon extends Entity {
@@ -8,7 +9,7 @@ export class Balloon extends Entity {
     }
 
     steer(direction) {
-        this.direction = direction
+        this.direction = normalize(direction)
     }
 
     update(deltaSeconds) {
