@@ -87,7 +87,6 @@ export class Game {
         for (const { balloon } of this.players) balloon.destroy()
         this.players = playerSetups.map((setup, index) => this.createPlayer({ ...setup, index }))
         this.handleResize()
-        for (const { balloon } of this.players) balloon.render()
         for (const system of this.systems) system.setup?.(this)
         this.#setState(GAME_STATE.IDLE)
         this.events.emit("game:setup", { players: this.players })
@@ -147,6 +146,8 @@ export class Game {
         for (const { balloon } of this.players) {
             balloon.resize(size, size)
             balloon.speed = viewport.height * BALLOON.speedRatio
+            balloon.keepInside(viewport)
+            balloon.render()
         }
     }
 
