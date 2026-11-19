@@ -42,7 +42,7 @@ describe("MatchTracker", () => {
 
     it("keeps the highest level reached", () => {
         const { events, tracker } = createTracker()
-        events.emit("level:changed", { level: 3 })
+        events.emit("level:changed", { level: { id: "night" }, number: 3, isFirst: false })
         events.emit("level:changed", 2)
         assert.equal(tracker.snapshot().level, 3)
     })

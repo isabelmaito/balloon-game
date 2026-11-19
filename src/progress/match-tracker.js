@@ -20,7 +20,7 @@ export class MatchTracker {
             this.coins += coinValue(coin)
         })
         events.on("level:changed", (payload) => {
-            const level = readNumber(payload, "level")
+            const level = readNumber(payload, "number")
             if (Number.isFinite(level)) this.level = Math.max(this.level, level)
         })
         events.on("lives:changed", (payload) => this.#trackLives(payload))
