@@ -42,3 +42,50 @@ and no runtime dependency: the browser loads `src/main.js` directly.
   `{ id, bindings, skin }`. Skins live in `src/game/skins.js`; each one is a
   `balloon--<id>` css modifier drawn in `css/skins.css` ("classic" keeps the image).
   Key rebinding rules (no duplicates, pause keys reserved) live in `src/input/binding-rules.js`.
+
+## Online multiplayer
+
+Two browsers play together over WebRTC with no server of our own. Code lives
+in `src/net/` (config, protocol, peer link, sync systems, session, strings) and
+the screen in `src/ui/online-screen.js`.
+
+**Signaling is manual.** `PeerConnection` waits until ICE gathering is
+complete, so one code per direction carries every candidate:
+
+1. The host clicks *Host* and gets an **offer code**.
+2. The guest pastes it under *Join* and gets an **answer code**.
+3. The host pastes the answer; the data channel opens.
+
+A code is the session description `{ type, sdp }` as JSON, UTF-8 encoded and
+then base64 (`encodeSignal` / `decodeSignal` in `src/net/protocol.js`). Only a
+public STUN server is configured, so peers behind strict NATs may not connect.
+
+**The host is authoritative.** It runs the normal simulation; player 2 is
+steered by a `RemoteControls` (same `direction` getter as `Controls`) fed by the
+guest's input. `HostSyncSystem` broadcasts a snapshot 20 times per second. The
+guest's game is set up with `simulate: false` (no movement, spawning or
+collisions) and `GuestSyncSystem` sends the local direction whenever it changes
+and eases balloons and coins toward the latest snapshot. Positions travel as
+fractions of the viewport so different window sizes line up.
+
+**Messages** are JSON objects with a `type`; each type has a validator and
+anything invalid from the peer is dropped.
+
+| Type | Direction | Payload |
+| --- | --- | --- |
+| `hello` | both | `version` (protocol version; a mismatch ends the session) |
+| `input` | guest → host | `direction: { x, y }`, each axis -1, 0 or 1 |
+| `state` | host → guest | `players: [{ id, x, y, score }]`, `coins: [{ id, x, y }]` |
+| `start` | host → guest | `difficulty` |
+| `pause` | both | `paused` |
+| `over` | host → guest | `scores: [{ id, score }]` |
+| `leave` | both | none |
+
+**Pause is shared:** pausing or resuming on either side does the same on the
+other, so the host never simulates while the guest is frozen.
+
+**Ending.** *Quit* or *Back* sends `leave`. A received `leave`, a closed data
+channel or a `disconnected`/`failed` connection ends the session; both sides
+return to the menu and `online:ended { reason }` shows why. `OnlineSession`
+also emits `online:connected { role }` once both peers said hello. Only the
+host can start a rematch from the results screen.
