@@ -1,5 +1,6 @@
 import { GAME_STATE } from "./game/game.js"
 import { t } from "./i18n/index.js"
+import { PAUSE_KEYS } from "./input/bindings.js"
 
 /** Coordinates the screen flow around a game instance. */
 export class App {
@@ -70,8 +71,7 @@ export class App {
     }
 
     handleKeyDown(event) {
-        const isPauseKey = event.code === "Escape" || event.code === "KeyP"
-        if (!isPauseKey) return
+        if (!PAUSE_KEYS.includes(event.code)) return
         if (this.game.state === GAME_STATE.RUNNING) this.pause()
         else if (this.game.state === GAME_STATE.PAUSED) this.resume()
     }
