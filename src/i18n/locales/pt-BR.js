@@ -7,7 +7,7 @@ export default {
     "pause.quit": "Sair para o menu",
     "gameOver.title": "Fim de jogo",
     "gameOver.playAgain": "Jogar de novo",
-    "gameOver.playerResult": "Jogador {player}: {score} moedas",
-    "hud.score": "Moedas: {score}",
+    "gameOver.playerResult": "Jogador {player}: {score} pontos",
+    "hud.score": "Pontos: {score}",
     "hud.playerScore": "J{player}: {score}",
 }

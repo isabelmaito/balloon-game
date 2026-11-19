@@ -7,7 +7,7 @@ export default {
     "pause.quit": "Quit to menu",
     "gameOver.title": "Game over",
     "gameOver.playAgain": "Play again",
-    "gameOver.playerResult": "Player {player}: {score} coins",
-    "hud.score": "Coins: {score}",
+    "gameOver.playerResult": "Player {player}: {score} points",
+    "hud.score": "Points: {score}",
     "hud.playerScore": "P{player}: {score}",
 }
