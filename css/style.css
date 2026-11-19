@@ -168,3 +168,8 @@ body[data-game-state="paused"] .sprite {
     font-size: 2.6vh;
     background: #fff3c4;
 }
+
+body[data-game-state="idle"] .hud,
+body[data-game-state="idle"] .hud-level {
+    visibility: hidden;
+}
