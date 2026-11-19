@@ -24,5 +24,9 @@ const hud = new Hud({ root: document.getElementById("hud"), events })
 
 keyboard.attach()
 events.on("game:setup", ({ players }) => hud.setPlayers(players))
+document.addEventListener("keydown", (event) => {
+    if (event.code === "Escape" || event.code === "KeyP") game.togglePause()
+})
+
 game.setup()
 game.start()
