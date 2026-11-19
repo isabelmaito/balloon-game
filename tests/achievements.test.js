@@ -2,7 +2,10 @@ import { describe, it } from "node:test"
 import assert from "node:assert/strict"
 import { ACHIEVEMENTS } from "../src/progress/achievements/catalog.js"
 import { findNewlyUnlocked, progressOf } from "../src/progress/achievements/evaluator.js"
+import { AchievementLedger } from "../src/progress/achievements/ledger.js"
 import { EMPTY_STATS } from "../src/progress/stats.js"
+import { Storage } from "../src/core/storage.js"
+import { MemoryStorage } from "./helpers/memory-storage.js"
 
 const MIN_ACHIEVEMENTS = 8
 const byId = (id) => ACHIEVEMENTS.find((achievement) => achievement.id === id)
@@ -57,5 +60,23 @@ describe("findNewlyUnlocked", () => {
 
     it("skips achievements that are already unlocked", () => {
         assert.deepEqual(unlockedIds({ wallet: 500 }, ["first-coin"]), ["treasure-hoard"])
+    })
+})
+
+describe("AchievementLedger", () => {
+    it("persists unlocked achievements with their date", () => {
+        const storage = new Storage(new MemoryStorage())
+        new AchievementLedger({ storage }).unlock(["first-coin"], 1000)
+        const ledger = new AchievementLedger({ storage })
+        assert.equal(ledger.isUnlocked("first-coin"), true)
+        assert.equal(ledger.unlockedAt("first-coin"), 1000)
+        assert.equal(ledger.count, 1)
+    })
+
+    it("forgets everything on reset", () => {
+        const ledger = new AchievementLedger({ storage: new Storage(new MemoryStorage()) })
+        ledger.unlock(["regular"], 1)
+        ledger.reset()
+        assert.equal(ledger.isUnlocked("regular"), false)
     })
 })
