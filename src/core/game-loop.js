@@ -34,7 +34,8 @@ export class GameLoop {
         const elapsedMs = this.#lastTimestamp === null ? 0 : timestamp - this.#lastTimestamp
         this.#lastTimestamp = timestamp
         const deltaSeconds = Math.min(elapsedMs / 1000, MAX_DELTA_SECONDS)
-        this.#update(deltaSeconds)
+        // Schedule first so a stop() requested during the update cancels this frame.
         this.#frameId = requestAnimationFrame(this.tick)
+        this.#update(deltaSeconds)
     }
 }
