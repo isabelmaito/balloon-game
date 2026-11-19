@@ -1,6 +1,7 @@
 export default {
     "game.title": "Balloon Game",
     "menu.play": "Play",
+    "menu.language": "Language",
     "pause.title": "Paused",
     "pause.resume": "Resume",
     "pause.quit": "Quit to menu",

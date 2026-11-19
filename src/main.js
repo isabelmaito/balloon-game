@@ -7,12 +7,14 @@ import { Game } from "./game/game.js"
 import { i18n, translateDom } from "./i18n/index.js"
 import { DEFAULT_LOCALE } from "./i18n/locales/index.js"
 import { Hud } from "./ui/hud.js"
+import { mountLanguagePicker } from "./ui/language-picker.js"
 import { ScreenManager } from "./ui/screen-manager.js"
 
 const settings = new Settings({ storage, defaults: { locale: DEFAULT_LOCALE } })
 i18n.setLocale(settings.get("locale"))
 i18n.onChange(() => translateDom())
 translateDom()
+mountLanguagePicker(document.getElementById("language-picker"), settings)
 
 const keyboard = new Keyboard()
 const events = new EventBus()

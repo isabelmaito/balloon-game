@@ -139,3 +139,16 @@ body[data-game-state="paused"] .sprite {
     list-style: none;
     font-size: 3.5vh;
 }
+
+.field {
+    display: flex;
+    align-items: center;
+    gap: 1.5vh;
+    font-size: 2.6vh;
+}
+
+.select {
+    padding: 0.8vh 1.5vh;
+    border-radius: 1vh;
+    font: 2.4vh "Trebuchet MS", sans-serif;
+}
