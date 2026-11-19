@@ -32,18 +32,30 @@ export class Game {
         })
         this.players = []
         this.state = GAME_STATE.IDLE
+        this.systems = []
         this.handleResize = this.handleResize.bind(this)
         window.addEventListener("resize", this.handleResize)
+    }
+
+    /**
+     * Plugs a gameplay system into the match lifecycle. A system may implement
+     * `setup(game)`, `update(deltaSeconds, game)` and `teardown(game)`.
+     */
+    addSystem(system) {
+        this.systems.push(system)
+        return this
     }
 
     /** Clears the field and prepares a fresh match for the given player setups. */
     setup(playerSetups = [{ id: 1, bindings: DEFAULT_BINDINGS.arrows }]) {
         this.loop.stop()
+        for (const system of this.systems) system.teardown?.(this)
         this.coins.clear()
         for (const { balloon } of this.players) balloon.destroy()
         this.players = playerSetups.map((setup, index) => this.createPlayer({ ...setup, index }))
         this.handleResize()
         for (const { balloon } of this.players) balloon.render()
+        for (const system of this.systems) system.setup?.(this)
         this.#setState(GAME_STATE.IDLE)
         this.events.emit("game:setup", { players: this.players })
     }
@@ -119,6 +131,8 @@ export class Game {
         this.coinSpawner.update(deltaSeconds)
         this.coins.update(deltaSeconds)
         for (const player of this.players) this.collectTouchedCoins(player)
+        for (const system of this.systems) system.update?.(deltaSeconds, this)
+        if (this.state !== GAME_STATE.RUNNING) return
 
         for (const { balloon } of this.players) balloon.render()
         this.coins.render()
