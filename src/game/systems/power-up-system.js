@@ -8,7 +8,6 @@ import { emitEffectsChanged } from "./effects-system.js"
 import { ScrollingSpawnSystem } from "./scrolling-spawn-system.js"
 
 const POWER_UP_KINDS = Object.keys(POWER_UPS)
-const NORMAL_COIN_MULTIPLIER = 1
 
 /**
  * Spawns shield, magnet and double-coin bubbles, grants their effect on
@@ -43,9 +42,6 @@ export class PowerUpSystem extends ScrollingSpawnSystem {
         super.update(deltaSeconds, game)
         if (!game.isSimulating) return
         for (const player of game.players) {
-            player.coinMultiplier = player.effects.isActive(EFFECT.DOUBLE_COINS)
-                ? POWER_UPS.doubleCoins.multiplier
-                : NORMAL_COIN_MULTIPLIER
             if (player.effects.isActive(EFFECT.MAGNET)) this.#pullCoins(player, game.coins.items, deltaSeconds)
         }
     }

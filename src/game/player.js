@@ -1,3 +1,5 @@
+import { POWER_UPS } from "../config.js"
+import { EFFECT } from "./effect-names.js"
 import { TimedEffects } from "./effects.js"
 
 /** A participant in the match: a balloon, the input steering it, its score and lives. */
@@ -9,8 +11,11 @@ export class Player {
         this.score = 0
         this.lives = lives
         this.effects = new TimedEffects()
-        /** Points earned per coin value; power-ups may raise it. */
-        this.coinMultiplier = 1
+    }
+
+    /** Points earned per coin value, raised while double coins is active. */
+    get coinMultiplier() {
+        return this.effects.isActive(EFFECT.DOUBLE_COINS) ? POWER_UPS.doubleCoins.multiplier : 1
     }
 
     get isOut() {
