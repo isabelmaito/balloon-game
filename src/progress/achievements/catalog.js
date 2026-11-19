@@ -1,13 +1,20 @@
 const SECONDS_PER_MINUTE = 60
 
+/** How an achievement's progress is counted, used to format it. */
+export const PROGRESS_UNIT = Object.freeze({
+    COUNT: "count",
+    SECONDS: "seconds",
+})
+
 /**
  * Builds a catalog entry. `measure(stats)` reads how far the player got;
  * the achievement unlocks once it reaches `goal`.
  */
-const achievement = (id, goal, measure) => Object.freeze({
+const achievement = (id, goal, measure, unit = PROGRESS_UNIT.COUNT) => Object.freeze({
     id,
     goal,
     measure,
+    unit,
     nameKey: `achievement.${id}.name`,
     descriptionKey: `achievement.${id}.description`,
 })
@@ -18,10 +25,10 @@ export const ACHIEVEMENTS = Object.freeze([
     achievement("coin-rush", 50, (stats) => stats.bestMatchCoins),
     achievement("treasure-hoard", 500, (stats) => stats.wallet),
     achievement("regular", 10, (stats) => stats.matchesPlayed),
-    achievement("survivor", 2 * SECONDS_PER_MINUTE, (stats) => stats.longestMatchSeconds),
+    achievement("survivor", 2 * SECONDS_PER_MINUTE, (stats) => stats.longestMatchSeconds, PROGRESS_UNIT.SECONDS),
     achievement("record-breaker", 1, (stats) => stats.recordsBroken),
     achievement("daredevil", 1, (stats) => stats.hardMatches),
     achievement("teamwork", 1, (stats) => stats.multiplayerMatches),
-    achievement("untouchable", SECONDS_PER_MINUTE, (stats) => stats.longestFlawlessSeconds),
+    achievement("untouchable", SECONDS_PER_MINUTE, (stats) => stats.longestFlawlessSeconds, PROGRESS_UNIT.SECONDS),
     achievement("climber", 5, (stats) => stats.bestLevel),
 ])
