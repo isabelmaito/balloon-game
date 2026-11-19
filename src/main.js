@@ -1,13 +1,16 @@
 import { BALLOON, COIN } from "./config.js"
 import { GameLoop } from "./core/game-loop.js"
+import { EventBus } from "./core/event-bus.js"
 import { Keyboard } from "./core/keyboard.js"
 import { Spawner } from "./core/spawner.js"
 import { Balloon } from "./entities/balloon.js"
 import { Coin } from "./entities/coin.js"
+import { intersects, shrink } from "./utils/collision.js"
 import { randomBetween } from "./utils/math.js"
 
 const playfield = document.getElementById("main")
 const keyboard = new Keyboard()
+const events = new EventBus()
 const viewportHeight = window.innerHeight
 
 const balloon = new Balloon({
@@ -51,7 +54,20 @@ function updateCoins(deltaSeconds) {
         coin.render()
         if (coin.isOffscreen) coin.destroy()
     }
+    collectTouchedCoins()
     coins = coins.filter((coin) => coin.isAlive)
+}
+
+const HITBOX_RATIO = 0.7
+
+function collectTouchedCoins() {
+    const balloonHitbox = shrink(balloon.bounds, HITBOX_RATIO)
+    for (const coin of coins) {
+        if (coin.isAlive && intersects(balloonHitbox, coin.bounds)) {
+            coin.destroy()
+            events.emit("coin:collected", coin)
+        }
+    }
 }
 
 function update(deltaSeconds) {
