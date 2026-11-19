@@ -22,6 +22,7 @@ export function installMultiplayer({ app, game, events, settings, root = documen
     const controls = new ControlsScreen({ root: root.querySelector('[data-screen="controls"]'), preferences })
     controls.mount()
     app.registerAction("controls", () => app.screens.show("controls"))
+    app.registerAction("controls-reset", () => controls.restoreDefaults())
     app.registerAction("controls-back", () => {
         controls.close()
         app.screens.show("menu")

@@ -64,6 +64,12 @@ export class ControlsScreen {
         this.#focus(slot)
     }
 
+    restoreDefaults() {
+        this.#capture.cancel()
+        this.#feedback = null
+        this.preferences.resetBindings()
+    }
+
     /** Stops any pending change, e.g. when leaving the screen. */
     close() {
         this.#capture.cancel()
