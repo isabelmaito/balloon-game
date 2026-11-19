@@ -1,3 +1,4 @@
+import { LEVELS } from "../../progression/levels.js"
 import { PROGRESS_UNIT, SECONDS_PER_MINUTE } from "../units.js"
 
 /**
@@ -24,5 +25,5 @@ export const ACHIEVEMENTS = Object.freeze([
     achievement("daredevil", 1, (stats) => stats.hardMatches),
     achievement("teamwork", 1, (stats) => stats.multiplayerMatches),
     achievement("untouchable", SECONDS_PER_MINUTE, (stats) => stats.longestFlawlessSeconds, PROGRESS_UNIT.SECONDS),
-    achievement("climber", 5, (stats) => stats.bestLevel),
+    achievement("climber", LEVELS.length, (stats) => stats.bestLevel),
 ])

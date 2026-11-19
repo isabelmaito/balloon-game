@@ -47,7 +47,7 @@ export const PROGRESS_MESSAGES = Object.freeze({
         "achievement.untouchable.name": "Intocável",
         "achievement.untouchable.description": "Voe 1 minuto sem perder uma vida.",
         "achievement.climber.name": "Alpinista",
-        "achievement.climber.description": "Alcance o nível 5.",
+        "achievement.climber.description": "Alcance a última fase.",
     },
     en: {
         "progress.menu.highScores": "High scores",
@@ -95,7 +95,7 @@ export const PROGRESS_MESSAGES = Object.freeze({
         "achievement.untouchable.name": "Untouchable",
         "achievement.untouchable.description": "Fly for 1 minute without losing a life.",
         "achievement.climber.name": "Climber",
-        "achievement.climber.description": "Reach level 5.",
+        "achievement.climber.description": "Reach the last level.",
     },
     es: {
         "progress.menu.highScores": "Récords",
@@ -143,7 +143,7 @@ export const PROGRESS_MESSAGES = Object.freeze({
         "achievement.untouchable.name": "Intocable",
         "achievement.untouchable.description": "Vuela 1 minuto sin perder una vida.",
         "achievement.climber.name": "Escalador",
-        "achievement.climber.description": "Alcanza el nivel 5.",
+        "achievement.climber.description": "Alcanza la última fase.",
     },
 })
 
