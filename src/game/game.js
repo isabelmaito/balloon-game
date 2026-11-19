@@ -9,6 +9,7 @@ import { DEFAULT_BINDINGS } from "../input/bindings.js"
 import { Controls } from "../input/controls.js"
 import { intersects, shrink } from "../utils/collision.js"
 import { randomBetween } from "../utils/math.js"
+import { Player } from "./player.js"
 
 export class Game {
     constructor({ playfield, keyboard, events }) {
@@ -22,8 +23,7 @@ export class Game {
             minInterval: COIN.minSpawnInterval,
             maxInterval: COIN.maxSpawnInterval,
         })
-        this.balloon = this.createBalloon()
-        this.controls = new Controls(keyboard, DEFAULT_BINDINGS.arrows)
+        this.players = [this.createPlayer({ id: 1, bindings: DEFAULT_BINDINGS.arrows })]
         this.handleResize = this.handleResize.bind(this)
     }
 
@@ -33,14 +33,7 @@ export class Game {
         this.loop.start()
     }
 
-    /** Keeps the balloon proportional to the viewport, which may be 0 before first layout. */
-    handleResize() {
-        const size = viewport.height * BALLOON.sizeRatio
-        this.balloon.resize(size, size)
-        this.balloon.speed = viewport.height * BALLOON.speedRatio
-    }
-
-    createBalloon() {
+    createPlayer({ id, bindings }) {
         const balloon = new Balloon({
             x: viewport.width * BALLOON.startXRatio,
             y: viewport.height * BALLOON.startYRatio,
@@ -48,7 +41,16 @@ export class Game {
             speed: viewport.height * BALLOON.speedRatio,
         })
         this.playfield.appendChild(balloon.element)
-        return balloon
+        return new Player({ id, balloon, controls: new Controls(this.keyboard, bindings) })
+    }
+
+    /** Keeps balloons proportional to the viewport, which may be 0 before first layout. */
+    handleResize() {
+        const size = viewport.height * BALLOON.sizeRatio
+        for (const { balloon } of this.players) {
+            balloon.resize(size, size)
+            balloon.speed = viewport.height * BALLOON.speedRatio
+        }
     }
 
     spawnCoin() {
@@ -62,24 +64,22 @@ export class Game {
     }
 
     update(deltaSeconds) {
-        this.balloon.steer(this.controls.direction)
-        this.balloon.update(deltaSeconds)
-        this.balloon.keepInside(viewport)
+        for (const player of this.players) player.update(deltaSeconds, viewport)
 
         this.coinSpawner.update(deltaSeconds)
         this.coins.update(deltaSeconds)
-        this.collectTouchedCoins()
+        for (const player of this.players) this.collectTouchedCoins(player)
 
-        this.balloon.render()
+        for (const { balloon } of this.players) balloon.render()
         this.coins.render()
     }
 
-    collectTouchedCoins() {
-        const balloonHitbox = shrink(this.balloon.bounds, HITBOX_RATIO)
+    collectTouchedCoins(player) {
+        const balloonHitbox = shrink(player.balloon.bounds, HITBOX_RATIO)
         for (const coin of this.coins.items) {
             if (coin.isAlive && intersects(balloonHitbox, coin.bounds)) {
                 coin.destroy()
-                this.events.emit("coin:collected", coin)
+                this.events.emit("coin:collected", { player, coin })
             }
         }
         this.coins.prune()
