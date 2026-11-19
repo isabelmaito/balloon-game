@@ -115,12 +115,13 @@ export class Game {
         this.events.emit("game:state", state)
     }
 
-    createPlayer({ id, bindings, index = 0 }) {
+    createPlayer({ id, bindings, skin, index = 0 }) {
         const balloon = new Balloon({
             x: viewport.width * BALLOON.startXRatio,
             y: viewport.height * (BALLOON.startYRatio + index * BALLOON.playerOffsetRatio),
             size: viewport.height * BALLOON.sizeRatio,
             speed: viewport.height * BALLOON.speedRatio,
+            skin,
         })
         this.playfield.appendChild(balloon.element)
         return new Player({ id, balloon, controls: new Controls(this.keyboard, bindings) })
