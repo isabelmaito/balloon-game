@@ -1,0 +1,32 @@
+:root {
+    --progress-gold: #ffd54a;
+    --progress-ink: #4a3300;
+    --progress-cream: #fff8dc;
+    --progress-shadow: #6b4a00;
+    --progress-panel: rgba(255, 248, 220, 0.12);
+    --progress-locked: rgba(255, 255, 255, 0.55);
+}
+
+.new-record {
+    margin: 0;
+    font-size: 4.5vh;
+    font-weight: bold;
+    color: var(--progress-gold);
+    text-shadow: 0 0.4vh 0 var(--progress-shadow);
+    animation: new-record-pulse 0.9s ease-in-out infinite alternate;
+}
+
+.new-record[hidden] {
+    display: none;
+}
+
+@keyframes new-record-pulse {
+    from { transform: scale(1) rotate(-2deg) }
+    to { transform: scale(1.12) rotate(2deg) }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .new-record {
+        animation: none;
+    }
+}
