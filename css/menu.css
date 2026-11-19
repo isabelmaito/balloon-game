@@ -1,0 +1,27 @@
+/* Main menu layout: settings on one side, navigation on the other. */
+
+.menu-layout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 2.5vh 3vh;
+    max-width: 96vw;
+}
+
+.menu-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.8vh;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
+    background: rgba(10, 25, 60, 0.45);
+}
+
+.menu-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5vh;
+}
