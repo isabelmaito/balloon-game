@@ -101,3 +101,29 @@ main {
 .screen[hidden] {
     display: none;
 }
+
+.screen-title {
+    margin: 0 0 2vh;
+    font-size: 9vh;
+    color: #fff8dc;
+    text-shadow: 0 0.6vh 0 #6b4a00;
+}
+
+.button {
+    min-width: 30vh;
+    padding: 1.5vh 4vh;
+    border: 0.4vh solid #6b4a00;
+    border-radius: 1.5vh;
+    background: #ffd54a;
+    color: #4a3300;
+    font: bold 3.2vh "Trebuchet MS", sans-serif;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.button:hover,
+.button:focus-visible {
+    transform: scale(1.06);
+    outline: none;
+    background: #ffe58a;
+}

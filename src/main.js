@@ -1,3 +1,4 @@
+import { App } from "./app.js"
 import { EventBus } from "./core/event-bus.js"
 import { Settings } from "./core/settings.js"
 import { storage } from "./core/storage.js"
@@ -6,6 +7,7 @@ import { Game } from "./game/game.js"
 import { i18n, translateDom } from "./i18n/index.js"
 import { DEFAULT_LOCALE } from "./i18n/locales/index.js"
 import { Hud } from "./ui/hud.js"
+import { ScreenManager } from "./ui/screen-manager.js"
 
 const settings = new Settings({ storage, defaults: { locale: DEFAULT_LOCALE } })
 i18n.setLocale(settings.get("locale"))
@@ -24,9 +26,6 @@ const hud = new Hud({ root: document.getElementById("hud"), events })
 
 keyboard.attach()
 events.on("game:setup", ({ players }) => hud.setPlayers(players))
-document.addEventListener("keydown", (event) => {
-    if (event.code === "Escape" || event.code === "KeyP") game.togglePause()
-})
 
-game.setup()
-game.start()
+const app = new App({ game, screens: new ScreenManager(), events })
+app.init()
