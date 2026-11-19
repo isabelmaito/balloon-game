@@ -54,3 +54,32 @@
     color: #fff8dc;
     text-shadow: 0 0.3vh 0 #6b4a00;
 }
+
+.level-banner {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    z-index: 15;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    font: bold 7vh "Trebuchet MS", sans-serif;
+    color: #fff8dc;
+    text-shadow: 0 0.5vh 0 #6b4a00;
+}
+
+.level-banner.is-visible {
+    animation: level-banner 2.5s ease-out forwards;
+}
+
+body[data-game-state="paused"] .level-banner {
+    animation-play-state: paused;
+}
+
+@keyframes level-banner {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+    15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
