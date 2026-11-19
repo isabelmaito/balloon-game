@@ -14,12 +14,20 @@ export class Hud {
         this.root.replaceChildren()
         this.#scores.clear()
         for (const player of players) {
+            const slot = document.createElement("div")
+            slot.className = `hud-player hud-player--p${player.id}`
             const badge = document.createElement("div")
             badge.className = `hud-score hud-score--p${player.id}`
-            this.root.appendChild(badge)
-            this.#scores.set(player.id, { badge, score: player.score })
+            slot.appendChild(badge)
+            this.root.appendChild(slot)
+            this.#scores.set(player.id, { slot, badge, score: player.score })
         }
         this.refresh()
+    }
+
+    /** Container around a player's score where features can mount extra widgets. */
+    slotFor(playerId) {
+        return this.#scores.get(playerId)?.slot
     }
 
     setScore(playerId, score) {
