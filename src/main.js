@@ -32,6 +32,7 @@ function spawnCoin() {
 function update(deltaSeconds) {
     balloon.steer(readDirection())
     balloon.update(deltaSeconds)
+    balloon.keepInside({ width: window.innerWidth, height: window.innerHeight })
     balloon.render()
 }
 
