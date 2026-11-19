@@ -178,6 +178,7 @@ export class Game {
     }
 
     collectTouchedCoins(player) {
+        if (player.isOut) return
         const balloonHitbox = shrink(player.balloon.bounds, HITBOX_RATIO)
         for (const coin of this.coins.items) {
             if (coin.isAlive && intersects(balloonHitbox, coin.bounds)) {

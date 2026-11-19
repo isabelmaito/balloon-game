@@ -16,6 +16,7 @@ export class Player {
     }
 
     update(deltaSeconds, bounds) {
+        if (this.isOut) return
         this.balloon.steer(this.controls.direction)
         this.balloon.update(deltaSeconds)
         this.balloon.keepInside(bounds)
