@@ -10,6 +10,11 @@ export class App {
         this.root = root
         /** Options for the next match; menus update it before `play()`. */
         this.matchOptions = {}
+        this.actions = new Map([
+            ["play", () => this.play()],
+            ["resume", () => this.resume()],
+            ["quit", () => this.showMenu()],
+        ])
         this.handleKeyDown = this.handleKeyDown.bind(this)
     }
 
@@ -23,13 +28,13 @@ export class App {
         this.showMenu()
     }
 
+    /** Lets features react to `[data-action]` buttons without editing this class. */
+    registerAction(name, handler) {
+        this.actions.set(name, handler)
+    }
+
     runAction(action) {
-        const handlers = {
-            play: () => this.play(),
-            resume: () => this.resume(),
-            quit: () => this.showMenu(),
-        }
-        handlers[action]?.()
+        this.actions.get(action)?.()
     }
 
     showMenu() {
