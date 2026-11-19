@@ -104,8 +104,12 @@ export class OnlineSession {
         this.#end(null)
     }
 
+    /** Starting over (e.g. after a mistyped code) silently drops the previous attempt. */
     #open(role) {
-        if (this.isActive) this.leave()
+        if (this.isActive) {
+            this.#send(createMessage(MESSAGE_TYPE.LEAVE))
+            this.#teardown()
+        }
         this.role = role
         this.#peer = new PeerConnection()
         this.#peer.onMessage = (message) => this.#handlers[message.type](message)
@@ -160,6 +164,12 @@ export class OnlineSession {
 
     #end(reason) {
         if (!this.isActive) return
+        this.#teardown()
+        this.#app.showMenu()
+        this.#events.emit("online:ended", { reason })
+    }
+
+    #teardown() {
         const peer = this.#peer
         peer.onStateChange = () => {}
         peer.onMessage = () => {}
@@ -170,7 +180,5 @@ export class OnlineSession {
         this.#remoteControls.reset()
         this.role = null
         this.isConnected = false
-        this.#app.showMenu()
-        this.#events.emit("online:ended", { reason })
     }
 }
