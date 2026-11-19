@@ -82,3 +82,22 @@ main {
     color: #fff8dc;
     text-shadow: 0 0.3vh 0 #6b4a00;
 }
+
+.screen {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5vh;
+    background: rgba(20, 40, 90, 0.55);
+    font-family: "Trebuchet MS", sans-serif;
+    color: #fff;
+    text-align: center;
+}
+
+.screen[hidden] {
+    display: none;
+}
