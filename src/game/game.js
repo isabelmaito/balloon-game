@@ -156,16 +156,21 @@ export class Game {
     }
 
     update(deltaSeconds) {
-        for (const player of this.players) player.update(deltaSeconds, viewport)
-
-        this.coinSpawner.update(deltaSeconds * this.spawnMultiplier)
-        this.coins.update(deltaSeconds)
-        for (const player of this.players) this.collectTouchedCoins(player)
+        this.simulate(deltaSeconds)
         for (const system of this.systems) system.update?.(deltaSeconds, this)
         if (this.state !== GAME_STATE.RUNNING) return
 
         for (const { balloon } of this.players) balloon.render()
         this.coins.render()
+    }
+
+    /** Applies the match rules: movement, spawning and coin collection. */
+    simulate(deltaSeconds) {
+        for (const player of this.players) player.update(deltaSeconds, viewport)
+
+        this.coinSpawner.update(deltaSeconds * this.spawnMultiplier)
+        this.coins.update(deltaSeconds)
+        for (const player of this.players) this.collectTouchedCoins(player)
     }
 
     collectTouchedCoins(player) {
