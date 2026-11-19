@@ -7,10 +7,6 @@
     gap: 1.5vh;
 }
 
-.player-setup .field[hidden] {
-    display: none;
-}
-
 /* Controls screen: one card per player, one row per action. */
 
 .controls-grid {

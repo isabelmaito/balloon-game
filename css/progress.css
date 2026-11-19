@@ -16,10 +16,6 @@
     animation: new-record-pulse 0.9s ease-in-out infinite alternate;
 }
 
-.new-record[hidden] {
-    display: none;
-}
-
 @keyframes new-record-pulse {
     from { transform: scale(1) rotate(-2deg) }
     to { transform: scale(1.12) rotate(2deg) }
@@ -52,11 +48,6 @@
     margin: 0;
     font-size: 2.6vh;
     text-align: center;
-}
-
-.progress-empty[hidden],
-.high-scores[hidden] {
-    display: none;
 }
 
 .high-scores,
@@ -148,11 +139,6 @@
 .button--danger:hover,
 .button--danger:focus-visible {
     background: #ec8a7d;
-}
-
-.button[hidden],
-.reset-confirm[hidden] {
-    display: none;
 }
 
 .reset-confirm {

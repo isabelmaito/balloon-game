@@ -1,3 +1,8 @@
+/* The hidden attribute must win over any display set by a component. */
+[hidden] {
+    display: none !important;
+}
+
 html, body {
     width: 100vw;
     height: 100vh;
@@ -106,9 +111,6 @@ body[data-game-state="paused"] .sprite {
     text-align: center;
 }
 
-.screen[hidden] {
-    display: none;
-}
 
 .screen-title {
     margin: 0 0 2vh;

@@ -1,21 +1,10 @@
 /* Online mode: host/join screen and menu notice. */
 
-.online {
-    overflow-y: auto;
-}
-
 .online-roles {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 2vh;
-}
-
-.online-roles[hidden],
-.online-code[hidden],
-.online-notice[hidden],
-.online [data-action][hidden] {
-    display: none;
 }
 
 .online-code {
