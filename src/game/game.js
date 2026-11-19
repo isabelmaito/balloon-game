@@ -115,7 +115,8 @@ export class Game {
         this.events.emit("game:state", state)
     }
 
-    createPlayer({ id, bindings, skin, index = 0 }) {
+    /** `controls` may be given directly (e.g. a network source); otherwise keys from `bindings` are used. */
+    createPlayer({ id, bindings, skin, controls = new Controls(this.keyboard, bindings), index = 0 }) {
         const balloon = new Balloon({
             x: viewport.width * BALLOON.startXRatio,
             y: viewport.height * (BALLOON.startYRatio + index * BALLOON.playerOffsetRatio),
@@ -124,7 +125,7 @@ export class Game {
             skin,
         })
         this.playfield.appendChild(balloon.element)
-        return new Player({ id, balloon, controls: new Controls(this.keyboard, bindings) })
+        return new Player({ id, balloon, controls })
     }
 
     /** Keeps balloons proportional to the viewport, which may be 0 before first layout. */
