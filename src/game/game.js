@@ -30,10 +30,20 @@ export class Game {
             minInterval: COIN.minSpawnInterval,
             maxInterval: COIN.maxSpawnInterval,
         })
-        this.players = [this.createPlayer({ id: 1, bindings: DEFAULT_BINDINGS.arrows })]
+        this.players = []
         this.state = GAME_STATE.IDLE
         this.handleResize = this.handleResize.bind(this)
         window.addEventListener("resize", this.handleResize)
+    }
+
+    /** Clears the field and prepares a fresh match for the given player setups. */
+    setup(playerSetups = [{ id: 1, bindings: DEFAULT_BINDINGS.arrows }]) {
+        this.loop.stop()
+        this.coins.clear()
+        for (const { balloon } of this.players) balloon.destroy()
+        this.players = playerSetups.map((setup, index) => this.createPlayer({ ...setup, index }))
+        this.#setState(GAME_STATE.IDLE)
+        this.events.emit("game:setup", { players: this.players })
     }
 
     start() {
@@ -71,10 +81,10 @@ export class Game {
         this.events.emit("game:state", state)
     }
 
-    createPlayer({ id, bindings }) {
+    createPlayer({ id, bindings, index = 0 }) {
         const balloon = new Balloon({
             x: viewport.width * BALLOON.startXRatio,
-            y: viewport.height * BALLOON.startYRatio,
+            y: viewport.height * (BALLOON.startYRatio + index * BALLOON.playerOffsetRatio),
             size: viewport.height * BALLOON.sizeRatio,
             speed: viewport.height * BALLOON.speedRatio,
         })

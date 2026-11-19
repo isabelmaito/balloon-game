@@ -23,5 +23,6 @@ const game = new Game({
 const hud = new Hud({ root: document.getElementById("hud"), events })
 
 keyboard.attach()
-hud.setPlayers(game.players)
+events.on("game:setup", ({ players }) => hud.setPlayers(players))
+game.setup()
 game.start()

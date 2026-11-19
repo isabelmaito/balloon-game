@@ -4,6 +4,7 @@ export const BALLOON = {
     speedRatio: 0.5,
     startXRatio: 0.1,
     startYRatio: 0.4,
+    playerOffsetRatio: 0.25,
 }
 
 export const COIN = {
