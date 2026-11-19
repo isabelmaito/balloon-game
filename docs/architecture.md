@@ -15,6 +15,7 @@ and no runtime dependency: the browser loads `src/main.js` directly.
 | `src/input/` | Key bindings and the `Controls` mapper. |
 | `src/i18n/` | Translator and the base locales. |
 | `src/ui/` | DOM widgets: HUD, screen manager, pickers. |
+| `src/progression/` | Difficulty picker, levels (phases), distance and their widgets. |
 | `src/utils/` | Pure helpers (math, collision). |
 | `tests/` | Unit tests for pure modules, run with `node --test`. |
 
@@ -25,10 +26,13 @@ and no runtime dependency: the browser loads `src/main.js` directly.
 - **Sizes are relative to the viewport height**, see `src/config.js`.
 - **Events decouple systems from UI.** `Game` emits `score:changed`,
   `coin:collected`, `game:state`, `game:setup` and `game:over` on the
-  `EventBus`; widgets subscribe to them.
+  `EventBus`; widgets subscribe to them. The level system adds
+  `level:changed` with `{ level, number, isFirst }`.
 - **Systems extend a match.** `game.addSystem(system)` plugs an object with
   optional `setup(game)`, `update(deltaSeconds, game)` and `teardown(game)`.
 - **Features own their strings.** Call `registerMessages({ "pt-BR": {...}, en: {...}, es: {...} })`
   next to the feature instead of growing the base locale files.
+- **Levels stack on difficulty.** Systems set `game.levelModifiers`; `game.speedMultiplier`
+  and `game.spawnMultiplier` combine them with the difficulty preset.
 - **Match options.** Menus write to `app.matchOptions` (`players`, `difficulty`)
   and `app.play()` passes them to `game.setup()`.
