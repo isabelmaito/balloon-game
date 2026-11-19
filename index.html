@@ -22,6 +22,7 @@
                 <legend data-i18n="menu.difficulty"></legend>
             </fieldset>
             <button class="button" data-action="high-scores" data-i18n="progress.menu.highScores"></button>
+            <button class="button" data-action="achievements" data-i18n="progress.menu.achievements"></button>
             <label class="field">
                 <span data-i18n="menu.language"></span>
                 <select id="language-picker" class="select"></select>
@@ -50,6 +51,15 @@
                 <p class="progress-empty" data-role="high-scores-empty" data-i18n="progress.highScores.empty"></p>
                 <h3 class="progress-subtitle" data-i18n="progress.stats.title"></h3>
                 <ul class="progress-stats" data-role="progress-stats"></ul>
+            </div>
+            <button class="button" data-action="progress-back" data-i18n="progress.back"></button>
+        </section>
+
+        <section class="screen" data-screen="achievements" aria-labelledby="achievements-title">
+            <h2 id="achievements-title" class="screen-title" data-i18n="progress.achievements.title"></h2>
+            <p class="progress-summary" data-role="achievements-summary"></p>
+            <div class="progress-panel">
+                <ul class="achievements" data-role="achievements"></ul>
             </div>
             <button class="button" data-action="progress-back" data-i18n="progress.back"></button>
         </section>

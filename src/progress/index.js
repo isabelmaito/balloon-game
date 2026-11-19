@@ -6,6 +6,7 @@ import { HighScores } from "./high-scores.js"
 import { MatchTracker } from "./match-tracker.js"
 import { ProgressService } from "./progress-service.js"
 import { ProgressStore } from "./progress-store.js"
+import { AchievementsView } from "./ui/achievements-view.js"
 import { HighScoresView } from "./ui/high-scores-view.js"
 import { mountRecordBadge } from "./ui/record-badge.js"
 
@@ -29,6 +30,7 @@ export function installProgress({ app, game, events, storage, root = document })
 
     const views = new Map([
         ["high-scores", new HighScoresView({ root, highScores: service.highScores, store: service.store })],
+        ["achievements", new AchievementsView({ root, catalog: ACHIEVEMENTS, ledger: service.ledger, store: service.store })],
     ])
     for (const [screen, view] of views) {
         app.registerAction(screen, () => {

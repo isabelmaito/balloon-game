@@ -92,3 +92,49 @@
 .progress-stats > li {
     padding: 0.4vh 0;
 }
+
+.progress-summary {
+    margin: 0;
+    font-size: 2.8vh;
+}
+
+.achievements {
+    display: grid;
+    gap: 1.2vh;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.achievement {
+    display: grid;
+    gap: 0.4vh;
+    padding: 1.2vh 1.6vh;
+    border-left: 0.6vh solid var(--progress-locked);
+    border-radius: 1vh;
+    color: var(--progress-locked);
+    font-size: 2.3vh;
+}
+
+.achievement--unlocked {
+    border-left-color: var(--progress-gold);
+    background: var(--progress-panel);
+    color: var(--progress-cream);
+}
+
+.achievement__name {
+    font-size: 2.7vh;
+}
+
+.achievement__status {
+    display: flex;
+    align-items: center;
+    gap: 1.5vh;
+    font-size: 2vh;
+}
+
+.achievement__bar {
+    flex: 1;
+    height: 1.2vh;
+    accent-color: var(--progress-gold);
+}
