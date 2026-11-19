@@ -1,4 +1,5 @@
 import { DEFAULT_DIFFICULTY } from "../game/difficulty.js"
+import { GAME_STATE } from "../game/game.js"
 import { GUEST_PLAYER_ID, HOST_PLAYER_ID, LOCAL_BINDINGS, PROTOCOL_VERSION } from "./config.js"
 import { GuestSyncSystem } from "./guest-sync-system.js"
 import { HostSyncSystem } from "./host-sync-system.js"
@@ -33,6 +34,7 @@ export class OnlineSession {
     #system = null
     #remoteControls = new RemoteControls()
     #handlers
+    #lastGameState = null
     #send = (message) => this.#peer?.send(message)
 
     constructor({ app, game, events }) {
@@ -46,10 +48,12 @@ export class OnlineSession {
             [MESSAGE_TYPE.INPUT]: ({ direction }) => this.#remoteControls.setDirection(direction),
             [MESSAGE_TYPE.STATE]: (snapshot) => this.#system?.receive?.(snapshot),
             [MESSAGE_TYPE.START]: ({ difficulty }) => this.#startAsGuest(difficulty),
+            [MESSAGE_TYPE.PAUSE]: ({ paused }) => this.#mirrorPause(paused),
             [MESSAGE_TYPE.OVER]: ({ scores }) => this.#finishAsGuest(scores),
             [MESSAGE_TYPE.LEAVE]: () => this.#end(END_REASON.PEER_LEFT),
         }
         events.on("game:over", ({ players }) => this.#announceOver(players))
+        events.on("game:state", (state) => this.#sharePause(state))
     }
 
     get isActive() {
@@ -143,6 +147,25 @@ export class OnlineSession {
                 { id: GUEST_PLAYER_ID, bindings: LOCAL_BINDINGS },
             ],
         })
+    }
+
+    /**
+     * Pausing on either side pauses both: local pause changes are forwarded and
+     * the peer mirrors them. Mirrored changes echo back once and stop there,
+     * because a peer already in the requested state ignores the message.
+     */
+    #sharePause(state) {
+        const wasPaused = this.#lastGameState === GAME_STATE.PAUSED
+        this.#lastGameState = state
+        const paused = state === GAME_STATE.PAUSED
+        const resumed = wasPaused && state === GAME_STATE.RUNNING
+        if (this.isConnected && (paused || resumed)) this.#send(createMessage(MESSAGE_TYPE.PAUSE, { paused }))
+    }
+
+    #mirrorPause(paused) {
+        const { state } = this.#game
+        if (paused && state === GAME_STATE.RUNNING) this.#app.pause()
+        else if (!paused && state === GAME_STATE.PAUSED) this.#app.resume()
     }
 
     #announceOver(players) {
