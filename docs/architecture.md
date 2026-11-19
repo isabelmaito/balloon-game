@@ -89,3 +89,18 @@ channel or a `disconnected`/`failed` connection ends the session; both sides
 return to the menu and `online:ended { reason }` shows why. `OnlineSession`
 also emits `online:connected { role }` once both peers said hello. Only the
 host can start a rematch from the results screen.
+
+## Hazards, lives and power-ups
+
+- `src/game/systems/` holds the survival systems, installed by
+  `installSurvivalSystems()`: `EffectsSystem` ticks each player's
+  `TimedEffects`, `LivesSystem` turns hits into lost lives and calls
+  `game.end()` when every player is out, and `HazardSystem` / `PowerUpSystem`
+  extend `ScrollingSpawnSystem` (spawn, scroll, balloon contact).
+- Rules stay pure and tested: `effects.js` (timers), `damage.js` (shield and
+  invulnerability), `magnet.js` (coin attraction).
+- Events: `hazard:hit`, `player:hit`, `lives:changed`, `player:out`,
+  `power-up:collected` and `effects:changed`.
+- Views live in `src/ui/survival/` and mount into `hud.slotFor(playerId)`.
+  Balloons expose active effects as `data-effects` for CSS; all drawings are
+  in `css/gameplay.css`.
