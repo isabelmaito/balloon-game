@@ -30,3 +30,65 @@
         animation: none;
     }
 }
+
+.progress-panel {
+    width: min(90vw, 80vh);
+    max-height: 55vh;
+    overflow-y: auto;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
+    background: var(--progress-panel);
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.progress-subtitle {
+    margin: 2vh 0 1vh;
+    font-size: 3vh;
+    color: var(--progress-cream);
+}
+
+.progress-empty {
+    margin: 0;
+    font-size: 2.6vh;
+    text-align: center;
+}
+
+.progress-empty[hidden],
+.high-scores[hidden] {
+    display: none;
+}
+
+.high-scores,
+.progress-stats {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 2.6vh;
+}
+
+.high-score {
+    display: grid;
+    grid-template-columns: 4vh 1fr auto auto;
+    gap: 2vh;
+    align-items: center;
+    padding: 0.8vh 0;
+    border-bottom: 0.2vh solid var(--progress-panel);
+}
+
+.high-score__rank {
+    font-weight: bold;
+    color: var(--progress-gold);
+}
+
+.high-score__score {
+    font-weight: bold;
+}
+
+.high-score__date {
+    opacity: 0.8;
+}
+
+.progress-stats > li {
+    padding: 0.4vh 0;
+}

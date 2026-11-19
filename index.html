@@ -21,6 +21,7 @@
             <fieldset id="difficulty-picker" class="difficulty-picker">
                 <legend data-i18n="menu.difficulty"></legend>
             </fieldset>
+            <button class="button" data-action="high-scores" data-i18n="progress.menu.highScores"></button>
             <label class="field">
                 <span data-i18n="menu.language"></span>
                 <select id="language-picker" class="select"></select>
@@ -40,6 +41,17 @@
             <p class="results-distance" data-role="distance"></p>
             <button class="button" data-action="play" data-i18n="gameOver.playAgain"></button>
             <button class="button" data-action="quit" data-i18n="pause.quit"></button>
+        </section>
+
+        <section class="screen" data-screen="high-scores" aria-labelledby="high-scores-title">
+            <h2 id="high-scores-title" class="screen-title" data-i18n="progress.highScores.title"></h2>
+            <div class="progress-panel">
+                <ol class="high-scores" data-role="high-scores"></ol>
+                <p class="progress-empty" data-role="high-scores-empty" data-i18n="progress.highScores.empty"></p>
+                <h3 class="progress-subtitle" data-i18n="progress.stats.title"></h3>
+                <ul class="progress-stats" data-role="progress-stats"></ul>
+            </div>
+            <button class="button" data-action="progress-back" data-i18n="progress.back"></button>
         </section>
     </main>
     

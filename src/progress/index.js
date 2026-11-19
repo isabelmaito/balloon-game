@@ -1,10 +1,12 @@
 import "./messages.js"
+import { i18n } from "../i18n/index.js"
 import { ACHIEVEMENTS } from "./achievements/catalog.js"
 import { AchievementLedger } from "./achievements/ledger.js"
 import { HighScores } from "./high-scores.js"
 import { MatchTracker } from "./match-tracker.js"
 import { ProgressService } from "./progress-service.js"
 import { ProgressStore } from "./progress-store.js"
+import { HighScoresView } from "./ui/high-scores-view.js"
 import { mountRecordBadge } from "./ui/record-badge.js"
 
 /**
@@ -24,5 +26,19 @@ export function installProgress({ app, game, events, storage, root = document })
         catalog: ACHIEVEMENTS,
     })
     mountRecordBadge(root.querySelector('[data-role="new-record"]'), events)
+
+    const views = new Map([
+        ["high-scores", new HighScoresView({ root, highScores: service.highScores, store: service.store })],
+    ])
+    for (const [screen, view] of views) {
+        app.registerAction(screen, () => {
+            view.render()
+            app.screens.show(screen)
+        })
+    }
+    app.registerAction("progress-back", () => app.showMenu())
+    i18n.onChange(() => {
+        for (const view of views.values()) view.render()
+    })
     return service
 }
