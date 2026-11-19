@@ -64,3 +64,21 @@ main {
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }
+
+.hud {
+    position: absolute;
+    inset: 0 0 auto 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 2vh 3vw;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.hud-score {
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 4vh;
+    font-weight: bold;
+    color: #fff8dc;
+    text-shadow: 0 0.3vh 0 #6b4a00;
+}
