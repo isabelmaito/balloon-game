@@ -1,9 +1,10 @@
+import { skinClassName } from "../game/skins.js"
 import { clamp, normalize } from "../utils/math.js"
 import { Entity } from "./entity.js"
 
 export class Balloon extends Entity {
-    constructor({ x, y, size, speed }) {
-        super({ x, y, width: size, height: size, className: "balloon" })
+    constructor({ x, y, size, speed, skin }) {
+        super({ x, y, width: size, height: size, className: `balloon ${skinClassName(skin)}` })
         this.speed = speed
         this.direction = { x: 0, y: 0 }
     }
