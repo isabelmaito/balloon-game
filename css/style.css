@@ -55,7 +55,7 @@ body[data-game-state="paused"] .sprite {
 .coin > .sprite {
     background-image: url("../images/coin-flip-39.gif");
 }
-}
+
 .entity {
     position: absolute;
     top: 0;
