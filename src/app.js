@@ -43,9 +43,10 @@ export class App {
         this.screens.show("menu")
     }
 
-    play() {
+    /** Starts a match; features such as online play may pass their own options. */
+    play(options = this.matchOptions) {
         this.screens.hide()
-        this.game.setup(this.matchOptions)
+        this.game.setup(options)
         this.game.start()
     }
 
