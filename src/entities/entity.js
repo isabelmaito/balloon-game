@@ -6,13 +6,10 @@ export class Entity {
     constructor({ x = 0, y = 0, width, height, className }) {
         this.x = x
         this.y = y
-        this.width = width
-        this.height = height
         this.isAlive = true
         this.element = document.createElement("div")
         this.element.className = `entity ${className}`
-        this.element.style.width = `${width}px`
-        this.element.style.height = `${height}px`
+        this.resize(width, height)
         this.sprite = document.createElement("div")
         this.sprite.className = "sprite"
         this.element.appendChild(this.sprite)
@@ -20,6 +17,13 @@ export class Entity {
 
     get bounds() {
         return { x: this.x, y: this.y, width: this.width, height: this.height }
+    }
+
+    resize(width, height) {
+        this.width = width
+        this.height = height
+        this.element.style.width = `${width}px`
+        this.element.style.height = `${height}px`
     }
 
     update(_deltaSeconds) {}

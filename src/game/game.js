@@ -21,10 +21,20 @@ export class Game {
             maxInterval: COIN.maxSpawnInterval,
         })
         this.balloon = this.createBalloon()
+        this.handleResize = this.handleResize.bind(this)
     }
 
     start() {
+        window.addEventListener("resize", this.handleResize)
+        this.handleResize()
         this.loop.start()
+    }
+
+    /** Keeps the balloon proportional to the viewport, which may be 0 before first layout. */
+    handleResize() {
+        const size = viewport.height * BALLOON.sizeRatio
+        this.balloon.resize(size, size)
+        this.balloon.speed = viewport.height * BALLOON.speedRatio
     }
 
     createBalloon() {
