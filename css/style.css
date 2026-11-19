@@ -14,7 +14,7 @@ main {
 #background {
     width: 200%;
     height: 100%;
-    background: url("./images/background01.png");
+    background: url("../images/background01.png");
     background-size: 100vw 100vh;
     background-repeat: repeat-x;
     position: absolute;
@@ -33,7 +33,7 @@ main {
 #balloon {
     width: 20vh;
     height: 20vh;
-    background: url("./images/Drifblim.png");
+    background: url("../images/Drifblim.png");
     background-size: 20vh 20vh;
     position: absolute; 
     top: 40vh;
@@ -56,7 +56,7 @@ main {
 .coin {
     width: 10vh;
     height: 10vh;
-    background:url("./images/coin-flip-39.gif");
+    background:url("../images/coin-flip-39.gif");
     background-size: 10vh 10vh;
     position: absolute;
     animation: slide-coin 7s linear;
