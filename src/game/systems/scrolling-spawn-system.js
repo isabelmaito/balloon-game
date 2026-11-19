@@ -42,6 +42,8 @@ export class ScrollingSpawnSystem {
     }
 
     update(deltaSeconds, game) {
+        // An online guest mirrors the host; spawning and touching are host rules.
+        if (!game.isSimulating) return
         this.#spawner.update(deltaSeconds * this.spawnRate(game))
         this.#group.update(deltaSeconds)
         for (const player of game.players) {

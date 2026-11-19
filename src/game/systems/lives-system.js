@@ -19,6 +19,7 @@ export class LivesSystem {
     }
 
     hit(player) {
+        if (this.#game?.isSimulating === false) return
         const result = applyHit(player, LIVES)
         if (result === HIT_RESULT.IGNORED) return
         this.events.emit("player:hit", { player, result })

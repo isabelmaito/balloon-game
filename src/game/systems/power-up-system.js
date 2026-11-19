@@ -41,6 +41,7 @@ export class PowerUpSystem extends ScrollingSpawnSystem {
 
     update(deltaSeconds, game) {
         super.update(deltaSeconds, game)
+        if (!game.isSimulating) return
         for (const player of game.players) {
             player.coinMultiplier = player.effects.isActive(EFFECT.DOUBLE_COINS)
                 ? POWER_UPS.doubleCoins.multiplier
