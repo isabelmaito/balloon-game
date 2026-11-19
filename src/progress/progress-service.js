@@ -28,6 +28,7 @@ export class ProgressService {
     }
 
     #handleCoin(coin) {
+        if (this.tracker.isMirror) return
         // The tracker listened first, so its snapshot already includes this coin.
         this.store.addCoins(coinValue(coin))
         this.store.recordMatchProgress(this.tracker.snapshot())
@@ -35,6 +36,7 @@ export class ProgressService {
     }
 
     #handleGameOver() {
+        if (this.tracker.isMirror) return
         const date = this.clock()
         const summary = this.tracker.snapshot()
         const { rank, isRecord, previousBest } = this.highScores.submit({

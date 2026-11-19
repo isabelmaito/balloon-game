@@ -12,11 +12,11 @@ import { MemoryStorage } from "./helpers/memory-storage.js"
 
 const NOW = 1_700_000_000_000
 
-function createService({ players = [{ id: 1, score: 0 }], difficulty = "normal" } = {}) {
+function createService({ players = [{ id: 1, score: 0 }], difficulty = "normal", isSimulating = true } = {}) {
     const storage = new Storage(new MemoryStorage())
     const events = new EventBus()
     const tracker = new MatchTracker({ events })
-    const game = { players, difficulty: { id: difficulty } }
+    const game = { players, difficulty: { id: difficulty }, isSimulating }
     tracker.setup(game)
     const service = new ProgressService({
         events,
@@ -38,6 +38,15 @@ function createService({ players = [{ id: 1, score: 0 }], difficulty = "normal" 
 }
 
 describe("ProgressService", () => {
+    it("ignores matches mirrored from an online host", () => {
+        const { service, events, game, emitted, collect } = createService({ isSimulating: false })
+        collect(game.players[0])
+        events.emit("game:over", { players: game.players })
+        assert.equal(service.store.stats.wallet, 0)
+        assert.equal(service.store.stats.matchesPlayed, 0)
+        assert.deepEqual(emitted.recorded, [])
+    })
+
     it("fills the wallet and unlocks the first coin achievement once", () => {
         const { service, game, emitted, collect } = createService()
         collect(game.players[0])

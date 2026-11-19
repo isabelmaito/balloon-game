@@ -38,6 +38,11 @@ export class MatchTracker {
         }
     }
 
+    /** True on an online guest, where the match belongs to the host. */
+    get isMirror() {
+        return this.#game?.isSimulating === false
+    }
+
     update(deltaSeconds) {
         this.durationSeconds += deltaSeconds
         if (this.livesLost === 0) this.flawlessSeconds = this.durationSeconds
