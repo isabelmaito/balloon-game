@@ -18,6 +18,20 @@ export function toPixels({ x, y }, viewport) {
     return { x: x * viewport.width, y: y * viewport.height }
 }
 
+/**
+ * Share of the remaining distance to cover this frame when easing toward a
+ * target at `ratePerSecond`. Frame-rate independent; 0 means stay, 1 means snap.
+ */
+export function blendFactor(deltaSeconds, ratePerSecond) {
+    return 1 - Math.exp(-ratePerSecond * deltaSeconds)
+}
+
+/** Moves `point` part of the way to `target`, in place. */
+export function moveToward(point, target, factor) {
+    point.x += (target.x - point.x) * factor
+    point.y += (target.y - point.y) * factor
+}
+
 /** Hands out stable numeric ids to objects without touching them. */
 export class EntityIds {
     #ids = new WeakMap()
