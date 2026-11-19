@@ -60,7 +60,7 @@ describe("MatchTracker", () => {
         tracker.update(1)
         tracker.setup({ players: [], difficulty: { id: "easy" } })
         assert.deepEqual(tracker.snapshot(), {
-            score: 0, coins: 0, durationSeconds: 0, flawlessSeconds: 0, level: 0, difficulty: "easy", players: 0,
+            score: 0, coins: 0, durationSeconds: 0, flawlessSeconds: 0, level: 1, difficulty: "easy", players: 0,
         })
     })
 })

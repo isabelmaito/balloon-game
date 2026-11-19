@@ -1,4 +1,6 @@
 const SHARED_LIVES = "shared"
+/** Every match starts on the first level, before any level event arrives. */
+const FIRST_LEVEL = 1
 const DEFAULT_COIN_VALUE = 1
 
 const readNumber = (payload, field) => (typeof payload === "number" ? payload : payload?.[field])
@@ -8,7 +10,8 @@ export const coinValue = (coin) => coin?.value ?? DEFAULT_COIN_VALUE
 /**
  * Game system that summarizes the running match for the progress feature.
  * Time comes from the loop's delta, so pauses are not counted. Level and lives
- * events are optional: when no system emits them those fields stay at zero.
+ * events are optional: without them the level stays at the first one and no
+ * lives are counted as lost.
  */
 export class MatchTracker {
     #game = null
@@ -58,7 +61,7 @@ export class MatchTracker {
         this.coins = 0
         this.durationSeconds = 0
         this.flawlessSeconds = 0
-        this.level = 0
+        this.level = FIRST_LEVEL
         this.livesLost = 0
         this.#lives.clear()
     }
