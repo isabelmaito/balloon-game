@@ -10,6 +10,12 @@
     --bird-beak: #ff9a2e;
     --eye-white: #ffffff;
     --eye-pupil: #1b1b1b;
+    --shield: #4da3ff;
+    --shield-edge: #1d5fb0;
+    --magnet: #e0403a;
+    --magnet-tip: #d9dde4;
+    --coin-gold: #ffc531;
+    --coin-edge: #b07800;
 }
 
 body[data-game-state="paused"] .sprite::before,
@@ -167,4 +173,44 @@ body[data-game-state="paused"] .balloon {
 .heart.is-lost {
     background: #9aa3b5;
     opacity: 0.45;
+}
+
+/* Power-up: a soft bubble that pulses around its effect icon. */
+.power-up > .sprite {
+    position: relative;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95) 0 9%, rgba(255, 255, 255, 0.3) 12% 62%, rgba(255, 255, 255, 0.7) 70%);
+    box-shadow: 0 0 1.5vh rgba(255, 255, 255, 0.8);
+    animation: power-up-pulse 0.8s ease-in-out infinite alternate;
+}
+
+.power-up .effect-icon {
+    position: absolute;
+    inset: 22%;
+}
+
+@keyframes power-up-pulse {
+    from { transform: scale(0.92) }
+    to { transform: scale(1.06) }
+}
+
+/* Effect icons, sized by their container. */
+.effect-icon {
+    display: block;
+}
+
+.effect-icon[data-kind="shield"] {
+    background: linear-gradient(to right, var(--shield) 50%, var(--shield-edge) 50%);
+    clip-path: polygon(50% 0, 100% 15%, 92% 60%, 50% 100%, 8% 60%, 0 15%);
+}
+
+.effect-icon[data-kind="magnet"] {
+    background: linear-gradient(to bottom, var(--magnet-tip) 0 28%, var(--magnet) 28%);
+    clip-path: polygon(0 0, 34% 0, 34% 62%, 66% 62%, 66% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.effect-icon[data-kind="doubleCoins"] {
+    background:
+        radial-gradient(circle at 66% 62%, var(--coin-gold) 0 30%, var(--coin-edge) 31% 37%, transparent 38%),
+        radial-gradient(circle at 36% 38%, var(--coin-gold) 0 30%, var(--coin-edge) 31% 37%, transparent 38%);
 }
