@@ -45,9 +45,10 @@ reservadas para a pausa.
 A conexão é ponto a ponto (WebRTC). Não existe servidor do jogo: os dois jogadores
 trocam códigos manualmente, por qualquer mensageiro.
 
-1. Quem hospeda clica em **Online → Hospedar** e envia o código gerado.
-2. Quem entra clica em **Online → Entrar**, cola o código e devolve o código de resposta.
-3. Quem hospeda cola a resposta e clica em **Começar**.
+1. Quem hospeda clica em **Online → Criar partida** e envia o código gerado.
+2. Quem entra clica em **Online → Entrar em partida**, cola o código, clica em
+   **Conectar** e devolve o código de resposta.
+3. Quem hospeda cola a resposta, clica em **Conectar** e depois em **Iniciar partida**.
 
 A partida roda no navegador de quem hospeda; o outro navegador envia só os comandos
 e recebe o estado do jogo. Pausar de um lado pausa os dois. Redes muito restritivas
