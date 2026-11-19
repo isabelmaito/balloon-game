@@ -22,6 +22,8 @@ export class App {
     runAction(action) {
         const handlers = {
             play: () => this.play(),
+            resume: () => this.resume(),
+            quit: () => this.showMenu(),
         }
         handlers[action]?.()
     }
@@ -37,8 +39,20 @@ export class App {
         this.game.start()
     }
 
+    pause() {
+        this.game.pause()
+        this.screens.show("pause")
+    }
+
+    resume() {
+        this.screens.hide()
+        this.game.resume()
+    }
+
     handleKeyDown(event) {
         const isPauseKey = event.code === "Escape" || event.code === "KeyP"
-        if (isPauseKey && this.game.state === GAME_STATE.RUNNING) this.game.pause()
+        if (!isPauseKey) return
+        if (this.game.state === GAME_STATE.RUNNING) this.pause()
+        else if (this.game.state === GAME_STATE.PAUSED) this.resume()
     }
 }
