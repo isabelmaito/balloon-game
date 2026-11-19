@@ -19,6 +19,9 @@ export const GAME_STATE = Object.freeze({
     OVER: "over",
 })
 
+/** Neutral extra multipliers; systems such as levels replace them during a match. */
+export const NEUTRAL_MODIFIERS = Object.freeze({ speedMultiplier: 1, spawnMultiplier: 1 })
+
 export class Game {
     constructor({ playfield, keyboard, events }) {
         this.playfield = playfield
@@ -33,10 +36,21 @@ export class Game {
         })
         this.players = []
         this.difficulty = getDifficulty(DEFAULT_DIFFICULTY)
+        this.levelModifiers = NEUTRAL_MODIFIERS
         this.state = GAME_STATE.IDLE
         this.systems = []
         this.handleResize = this.handleResize.bind(this)
         window.addEventListener("resize", this.handleResize)
+    }
+
+    /** Scroll speed scale: difficulty preset times the current level. */
+    get speedMultiplier() {
+        return this.difficulty.speedMultiplier * this.levelModifiers.speedMultiplier
+    }
+
+    /** Spawn rate scale: difficulty preset times the current level. */
+    get spawnMultiplier() {
+        return this.difficulty.spawnMultiplier * this.levelModifiers.spawnMultiplier
     }
 
     /**
@@ -127,14 +141,14 @@ export class Game {
             x: viewport.width,
             y: randomBetween(0, viewport.height - size),
             size,
-            speed: viewport.height * COIN.speedRatio * this.difficulty.speedMultiplier,
+            speed: viewport.height * COIN.speedRatio * this.speedMultiplier,
         }))
     }
 
     update(deltaSeconds) {
         for (const player of this.players) player.update(deltaSeconds, viewport)
 
-        this.coinSpawner.update(deltaSeconds * this.difficulty.spawnMultiplier)
+        this.coinSpawner.update(deltaSeconds * this.spawnMultiplier)
         this.coins.update(deltaSeconds)
         for (const player of this.players) this.collectTouchedCoins(player)
         for (const system of this.systems) system.update?.(deltaSeconds, this)
