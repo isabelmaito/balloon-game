@@ -1,4 +1,5 @@
 import { GAME_STATE } from "./game/game.js"
+import { t } from "./i18n/index.js"
 
 /** Coordinates the screen flow around a game instance. */
 export class App {
@@ -16,6 +17,7 @@ export class App {
             if (action) this.runAction(action)
         })
         document.addEventListener("keydown", this.handleKeyDown)
+        this.events.on("game:over", ({ players }) => this.showResults(players))
         this.showMenu()
     }
 
@@ -37,6 +39,17 @@ export class App {
         this.screens.hide()
         this.game.setup()
         this.game.start()
+    }
+
+    showResults(players) {
+        const list = this.root.querySelector('[data-role="results"]')
+        const ranking = [...players].sort((a, b) => b.score - a.score)
+        list.replaceChildren(...ranking.map((player) => {
+            const item = document.createElement("li")
+            item.textContent = t("gameOver.playerResult", { player: player.id, score: player.score })
+            return item
+        }))
+        this.screens.show("game-over")
     }
 
     pause() {

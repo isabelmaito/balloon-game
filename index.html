@@ -21,6 +21,13 @@
             <button class="button" data-action="resume" data-i18n="pause.resume"></button>
             <button class="button" data-action="quit" data-i18n="pause.quit"></button>
         </section>
+
+        <section class="screen" data-screen="game-over" aria-labelledby="game-over-title">
+            <h2 id="game-over-title" class="screen-title" data-i18n="gameOver.title"></h2>
+            <ol class="results" data-role="results"></ol>
+            <button class="button" data-action="play" data-i18n="gameOver.playAgain"></button>
+            <button class="button" data-action="quit" data-i18n="pause.quit"></button>
+        </section>
     </main>
     
     <script type="module" src="./src/main.js"></script>

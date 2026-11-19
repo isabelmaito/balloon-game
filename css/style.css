@@ -132,3 +132,10 @@ body[data-game-state="paused"] .sprite {
     outline: none;
     background: #ffe58a;
 }
+
+.results {
+    margin: 0 0 2vh;
+    padding: 0;
+    list-style: none;
+    font-size: 3.5vh;
+}
