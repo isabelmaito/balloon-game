@@ -8,6 +8,8 @@ export class App {
         this.screens = screens
         this.events = events
         this.root = root
+        /** Options for the next match; menus update it before `play()`. */
+        this.matchOptions = {}
         this.handleKeyDown = this.handleKeyDown.bind(this)
     }
 
@@ -31,13 +33,13 @@ export class App {
     }
 
     showMenu() {
-        this.game.setup()
+        this.game.setup(this.matchOptions)
         this.screens.show("menu")
     }
 
     play() {
         this.screens.hide()
-        this.game.setup()
+        this.game.setup(this.matchOptions)
         this.game.start()
     }
 

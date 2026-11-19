@@ -9,6 +9,7 @@ import { DEFAULT_BINDINGS } from "../input/bindings.js"
 import { Controls } from "../input/controls.js"
 import { intersects, shrink } from "../utils/collision.js"
 import { randomBetween } from "../utils/math.js"
+import { DEFAULT_DIFFICULTY, getDifficulty } from "./difficulty.js"
 import { Player } from "./player.js"
 
 export const GAME_STATE = Object.freeze({
@@ -31,6 +32,7 @@ export class Game {
             maxInterval: COIN.maxSpawnInterval,
         })
         this.players = []
+        this.difficulty = getDifficulty(DEFAULT_DIFFICULTY)
         this.state = GAME_STATE.IDLE
         this.systems = []
         this.handleResize = this.handleResize.bind(this)
@@ -46,9 +48,13 @@ export class Game {
         return this
     }
 
-    /** Clears the field and prepares a fresh match for the given player setups. */
-    setup(playerSetups = [{ id: 1, bindings: DEFAULT_BINDINGS.arrows }]) {
+    /** Clears the field and prepares a fresh match. */
+    setup({
+        players: playerSetups = [{ id: 1, bindings: DEFAULT_BINDINGS.arrows }],
+        difficulty = DEFAULT_DIFFICULTY,
+    } = {}) {
         this.loop.stop()
+        this.difficulty = getDifficulty(difficulty)
         for (const system of this.systems) system.teardown?.(this)
         this.coins.clear()
         for (const { balloon } of this.players) balloon.destroy()
@@ -121,14 +127,14 @@ export class Game {
             x: viewport.width,
             y: randomBetween(0, viewport.height - size),
             size,
-            speed: viewport.height * COIN.speedRatio,
+            speed: viewport.height * COIN.speedRatio * this.difficulty.speedMultiplier,
         }))
     }
 
     update(deltaSeconds) {
         for (const player of this.players) player.update(deltaSeconds, viewport)
 
-        this.coinSpawner.update(deltaSeconds)
+        this.coinSpawner.update(deltaSeconds * this.difficulty.spawnMultiplier)
         this.coins.update(deltaSeconds)
         for (const player of this.players) this.collectTouchedCoins(player)
         for (const system of this.systems) system.update?.(deltaSeconds, this)
