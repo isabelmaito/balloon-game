@@ -22,7 +22,10 @@ export function installMultiplayer({ app, game, events, settings, root = documen
     const controls = new ControlsScreen({ root: root.querySelector('[data-screen="controls"]'), preferences })
     controls.mount()
     app.registerAction("controls", () => app.screens.show("controls"))
-    app.registerAction("controls-back", () => app.screens.show("menu"))
+    app.registerAction("controls-back", () => {
+        controls.close()
+        app.screens.show("menu")
+    })
     preferences.onChange(applyPreferences)
     app.matchOptions.players = preferences.toMatchPlayers()
     return preferences
