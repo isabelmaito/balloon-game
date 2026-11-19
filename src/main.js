@@ -1,7 +1,9 @@
-import { BALLOON } from "./config.js"
+import { BALLOON, COIN } from "./config.js"
 import { GameLoop } from "./core/game-loop.js"
 import { Keyboard } from "./core/keyboard.js"
 import { Balloon } from "./entities/balloon.js"
+import { Coin } from "./entities/coin.js"
+import { randomBetween } from "./utils/math.js"
 
 const playfield = document.getElementById("main")
 const keyboard = new Keyboard()
@@ -21,12 +23,25 @@ function readDirection() {
     return { x, y }
 }
 
+const coins = []
+
 function spawnCoin() {
-    const coin = document.createElement("div")
-    coin.classList.add("coin")
-    coin.style.left = "100vw"
-    coin.style.top = (Math.random() * 90) + "vh"
-    playfield.appendChild(coin)
+    const size = viewportHeight * COIN.sizeRatio
+    const coin = new Coin({
+        x: window.innerWidth,
+        y: randomBetween(0, window.innerHeight - size),
+        size,
+        speed: viewportHeight * COIN.speedRatio,
+    })
+    coins.push(coin)
+    playfield.appendChild(coin.element)
+}
+
+function updateCoins(deltaSeconds) {
+    for (const coin of coins) {
+        coin.update(deltaSeconds)
+        coin.render()
+    }
 }
 
 function update(deltaSeconds) {
@@ -34,6 +49,7 @@ function update(deltaSeconds) {
     balloon.update(deltaSeconds)
     balloon.keepInside({ width: window.innerWidth, height: window.innerHeight })
     balloon.render()
+    updateCoins(deltaSeconds)
 }
 
 const loop = new GameLoop(update)

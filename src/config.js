@@ -5,3 +5,8 @@ export const BALLOON = {
     startXRatio: 0.1,
     startYRatio: 0.4,
 }
+
+export const COIN = {
+    sizeRatio: 0.1,
+    speedRatio: 0.35,
+}
