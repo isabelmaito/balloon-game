@@ -18,6 +18,18 @@ longe possível, sozinho, com alguém no mesmo teclado ou online.
 - **Recordes, estatísticas e conquistas** salvos no navegador.
 - **Idiomas**: português, inglês e espanhol.
 
+## Como rodar
+
+O jogo usa ES modules, então precisa ser servido por HTTP (abrir o `index.html`
+direto pelo sistema de arquivos não funciona).
+
+```bash
+npm start
+```
+
+Depois abra <http://localhost:8080>. O script usa `python3 -m http.server`; qualquer
+servidor estático serve.
+
 ## Versões anteriores
 
 V1:
