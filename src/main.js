@@ -24,7 +24,7 @@ function readDirection() {
     return { x, y }
 }
 
-const coins = []
+let coins = []
 
 function spawnCoin() {
     const size = viewportHeight * COIN.sizeRatio
@@ -49,7 +49,9 @@ function updateCoins(deltaSeconds) {
     for (const coin of coins) {
         coin.update(deltaSeconds)
         coin.render()
+        if (coin.isOffscreen) coin.destroy()
     }
+    coins = coins.filter((coin) => coin.isAlive)
 }
 
 function update(deltaSeconds) {
