@@ -12,3 +12,6 @@ export const COIN = {
     minSpawnInterval: 0.8,
     maxSpawnInterval: 2,
 }
+
+/** Portion of the balloon box that counts for collisions. */
+export const HITBOX_RATIO = 0.7
