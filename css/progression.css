@@ -84,6 +84,12 @@ body[data-game-state="paused"] .level-banner {
     100% { opacity: 0; }
 }
 
+.results-distance {
+    margin: -1vh 0 2vh;
+    font-size: 3vh;
+    color: #fff8dc;
+}
+
 /* Sky themes: tint the scrolling background per level. */
 
 #background {

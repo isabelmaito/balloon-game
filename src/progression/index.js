@@ -1,4 +1,5 @@
 import { mountDifficultyPicker } from "./difficulty-picker.js"
+import { mountDistanceResult } from "./distance-result.js"
 import { LevelBanner } from "./level-banner.js"
 import { LevelIndicator } from "./level-indicator.js"
 import { LevelSystem } from "./level-system.js"
@@ -15,6 +16,7 @@ export function mountProgression({ app, settings, root = document }) {
     new LevelIndicator({ element: root.getElementById("level-indicator"), events })
     new LevelBanner({ element: root.getElementById("level-banner"), events })
     mountSkyTheme({ events, body: root.body })
+    mountDistanceResult({ element: root.querySelector('[data-role="distance"]'), events, levels })
 
     mountDifficultyPicker(root.getElementById("difficulty-picker"), {
         settings,
