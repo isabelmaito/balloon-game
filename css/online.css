@@ -43,12 +43,6 @@
     background: #fff8dc;
 }
 
-.button--small {
-    min-width: 0;
-    padding: 0.8vh 2.5vh;
-    font-size: 2.4vh;
-}
-
 .online-status {
     min-height: 3vh;
     margin: 0;
