@@ -3,6 +3,7 @@ import assert from "node:assert/strict"
 import { EntityGroup } from "../src/core/entity-group.js"
 import { EventBus } from "../src/core/event-bus.js"
 import { GUEST_PLAYER_ID, HOST_PLAYER_ID } from "../src/net/config.js"
+import { TimedEffects } from "../src/game/effects.js"
 import { GuestSyncSystem } from "../src/net/guest-sync-system.js"
 import { MESSAGE_TYPE, isValidMessage } from "../src/net/protocol.js"
 import { createFakeElement, installFakeDocument } from "./helpers/fake-dom.js"
@@ -11,7 +12,14 @@ const VIEWPORT = { width: 1000, height: 500 }
 const FRAME = 1 / 60
 
 function fakePlayer(id) {
-    return { id, score: 0, controls: { direction: { x: 0, y: 0 } }, balloon: { x: 0, y: 0 } }
+    return {
+        id,
+        score: 0,
+        lives: 3,
+        effects: new TimedEffects(),
+        controls: { direction: { x: 0, y: 0 } },
+        balloon: { x: 0, y: 0, element: { classList: new Set(), dataset: {} } },
+    }
 }
 
 function createSystem() {
@@ -19,16 +27,21 @@ function createSystem() {
     const playfield = createFakeElement()
     const game = {
         players: [fakePlayer(HOST_PLAYER_ID), fakePlayer(GUEST_PLAYER_ID)],
+        playfield,
         coins: new EntityGroup(playfield),
         events: new EventBus(),
     }
-    const system = new GuestSyncSystem({ send: (message) => sent.push(message), viewport: VIEWPORT })
-    system.setup()
+    const system = new GuestSyncSystem({
+        send: (message) => sent.push(message),
+        levels: { syncDistance() {} },
+        viewport: VIEWPORT,
+    })
+    system.setup(game)
     return { system, game, sent, playfield, guest: game.players[1] }
 }
 
 function snapshot(coins, players = []) {
-    return { players, coins }
+    return { players, coins, hazards: [], powerUps: [], distance: 0 }
 }
 
 describe("GuestSyncSystem", () => {
@@ -89,7 +102,7 @@ describe("GuestSyncSystem", () => {
             const { system, game, sent } = createSystem()
             system.update(FRAME, game)
             system.teardown()
-            system.setup()
+            system.setup(game)
             system.update(FRAME, game)
             assert.equal(sent.length, 2)
         })
@@ -149,7 +162,7 @@ describe("GuestSyncSystem", () => {
             const { system, game, guest } = createSystem()
             const changes = []
             game.events.on("score:changed", ({ player, score }) => changes.push([player.id, score]))
-            system.receive(snapshot([], [{ id: GUEST_PLAYER_ID, x: 0.5, y: 0.5, score: 3 }]))
+            system.receive(snapshot([], [{ id: GUEST_PLAYER_ID, x: 0.5, y: 0.5, score: 3, lives: 3, effects: [] }]))
             system.update(FRAME, game)
             system.update(FRAME, game)
             assert.equal(guest.score, 3)
@@ -158,7 +171,7 @@ describe("GuestSyncSystem", () => {
 
         it("eases balloons toward their snapshot position", () => {
             const { system, game, guest } = createSystem()
-            system.receive(snapshot([], [{ id: GUEST_PLAYER_ID, x: 0.5, y: 0.5, score: 0 }]))
+            system.receive(snapshot([], [{ id: GUEST_PLAYER_ID, x: 0.5, y: 0.5, score: 0, lives: 3, effects: [] }]))
             system.update(FRAME, game)
             assert.ok(guest.balloon.x > 0 && guest.balloon.x < 500)
             assert.ok(guest.balloon.y > 0 && guest.balloon.y < 250)

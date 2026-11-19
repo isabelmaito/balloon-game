@@ -2,6 +2,7 @@ import { COIN } from "../config.js"
 import { viewport as defaultViewport } from "../core/viewport.js"
 import { Coin } from "../entities/coin.js"
 import { GUEST_PLAYER_ID, GUEST_SMOOTHING_RATE } from "./config.js"
+import { EntityMirror } from "./entity-mirror.js"
 import { MESSAGE_TYPE, createMessage } from "./protocol.js"
 import { blendFactor, moveToward, toPixels } from "./snapshot.js"
 
@@ -18,7 +19,7 @@ export class GuestSyncSystem {
     #localPlayerId
     #snapshot = null
     #lastDirection = null
-    #coins = new Map()
+    #coins = null
 
     constructor({ send, localPlayerId = GUEST_PLAYER_ID, viewport = defaultViewport }) {
         this.#send = send
@@ -31,8 +32,9 @@ export class GuestSyncSystem {
         this.#snapshot = snapshot
     }
 
-    setup() {
+    setup(game) {
         this.#reset()
+        this.#coins = new EntityMirror(() => this.#spawnCoin(game))
     }
 
     teardown() {
@@ -44,13 +46,14 @@ export class GuestSyncSystem {
         if (!this.#snapshot) return
         const factor = blendFactor(deltaSeconds, GUEST_SMOOTHING_RATE)
         this.#applyPlayers(game, factor)
-        this.#applyCoins(game, factor)
+        this.#coins.apply(this.#snapshot.coins, this.#viewport, factor)
+        game.coins.prune()
     }
 
     #reset() {
         this.#snapshot = null
         this.#lastDirection = null
-        this.#coins.clear()
+        this.#coins?.clear()
     }
 
     #sendInput(game) {
@@ -73,27 +76,7 @@ export class GuestSyncSystem {
         }
     }
 
-    /** New coins appear right at their position; known ones glide to it. */
-    #applyCoins(game, factor) {
-        const visibleIds = new Set()
-        for (const state of this.#snapshot.coins) {
-            visibleIds.add(state.id)
-            const target = toPixels(state, this.#viewport)
-            const coin = this.#coins.get(state.id)
-            if (coin) moveToward(coin, target, factor)
-            else Object.assign(this.#spawnCoin(state.id, game), target)
-        }
-        for (const [id, coin] of this.#coins) {
-            if (visibleIds.has(id)) continue
-            coin.destroy()
-            this.#coins.delete(id)
-        }
-        game.coins.prune()
-    }
-
-    #spawnCoin(id, game) {
-        const coin = game.coins.add(new Coin({ size: this.#viewport.height * COIN.sizeRatio, speed: 0 }))
-        this.#coins.set(id, coin)
-        return coin
+    #spawnCoin(game) {
+        return game.coins.add(new Coin({ size: this.#viewport.height * COIN.sizeRatio, speed: 0 }))
     }
 }
