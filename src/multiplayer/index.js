@@ -1,6 +1,7 @@
 import "./messages.js"
 import { GAME_STATE } from "../game/game.js"
 import { PlayerPreferences } from "../game/player-preferences.js"
+import { ControlsScreen } from "./controls-screen.js"
 import { PlayerSetupPanel } from "./player-setup-panel.js"
 import { PlayerTags } from "./player-tags.js"
 
@@ -18,6 +19,10 @@ export function installMultiplayer({ app, game, events, settings, root = documen
     }
 
     new PlayerSetupPanel({ root: root.querySelector('[data-role="player-setup"]'), preferences }).mount()
+    const controls = new ControlsScreen({ root: root.querySelector('[data-screen="controls"]'), preferences })
+    controls.mount()
+    app.registerAction("controls", () => app.screens.show("controls"))
+    app.registerAction("controls-back", () => app.screens.show("menu"))
     preferences.onChange(applyPreferences)
     app.matchOptions.players = preferences.toMatchPlayers()
     return preferences
