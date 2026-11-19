@@ -1,0 +1,44 @@
+/* Difficulty selection, level indicator, level banner and sky themes. */
+
+.difficulty-picker {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5vh;
+    margin: 0;
+    padding: 1vh 2vh 1.5vh;
+    border: 0.3vh solid rgba(255, 248, 220, 0.6);
+    border-radius: 1.5vh;
+    font-size: 2.6vh;
+}
+
+.difficulty-picker > legend {
+    padding: 0 1vh;
+}
+
+.difficulty-option {
+    display: flex;
+    align-items: center;
+    gap: 0.8vh;
+    padding: 0.6vh 1.5vh;
+    border-radius: 1vh;
+    cursor: pointer;
+}
+
+.difficulty-option:has(input:checked) {
+    background: #ffd54a;
+    color: #4a3300;
+    font-weight: bold;
+}
+
+.difficulty-option:has(input:focus-visible) {
+    outline: 0.3vh solid #fff8dc;
+    outline-offset: 0.3vh;
+}
+
+.difficulty-option > input {
+    width: 2.2vh;
+    height: 2.2vh;
+    margin: 0;
+    accent-color: #6b4a00;
+}
