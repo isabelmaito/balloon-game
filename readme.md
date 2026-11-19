@@ -30,6 +30,16 @@ npm start
 Depois abra <http://localhost:8080>. O script usa `python3 -m http.server`; qualquer
 servidor estático serve.
 
+## Controles
+
+| Ação | Jogador 1 | Jogador 2 |
+| --- | --- | --- |
+| Mover | Setas | W A S D |
+| Pausar / continuar | Esc ou P | Esc ou P |
+
+As teclas podem ser trocadas em **Controles**, no menu principal. Esc e P ficam
+reservadas para a pausa.
+
 ## Versões anteriores
 
 V1:
