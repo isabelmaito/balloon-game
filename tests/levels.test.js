@@ -27,6 +27,10 @@ describe("LEVELS", () => {
         assert.equal(LEVELS[0].startsAt, 0)
     })
 
+    it("each name a sky theme", () => {
+        for (const level of LEVELS) assert.equal(typeof level.sky, "string")
+    })
+
     it("start further away and get harder in order", () => {
         for (let index = 1; index < LEVELS.length; index++) {
             const previous = LEVELS[index - 1]
