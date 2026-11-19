@@ -38,6 +38,7 @@ export class Game {
         this.difficulty = getDifficulty(DEFAULT_DIFFICULTY)
         this.levelModifiers = NEUTRAL_MODIFIERS
         this.state = GAME_STATE.IDLE
+        this.isSimulating = true
         this.systems = []
         this.handleResize = this.handleResize.bind(this)
         window.addEventListener("resize", this.handleResize)
@@ -74,9 +75,12 @@ export class Game {
     setup({
         players: playerSetups = [{ id: 1, bindings: DEFAULT_BINDINGS.arrows }],
         difficulty = DEFAULT_DIFFICULTY,
+        simulate = true,
     } = {}) {
         this.loop.stop()
         this.difficulty = getDifficulty(difficulty)
+        /** False on an online guest: the host runs the rules and systems mirror its state. */
+        this.isSimulating = simulate
         for (const system of this.systems) system.teardown?.(this)
         this.coins.clear()
         for (const { balloon } of this.players) balloon.destroy()
@@ -156,7 +160,7 @@ export class Game {
     }
 
     update(deltaSeconds) {
-        this.simulate(deltaSeconds)
+        if (this.isSimulating) this.simulate(deltaSeconds)
         for (const system of this.systems) system.update?.(deltaSeconds, this)
         if (this.state !== GAME_STATE.RUNNING) return
 
