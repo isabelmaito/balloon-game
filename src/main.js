@@ -14,6 +14,7 @@ import { Hud } from "./ui/hud.js"
 import { OnlineSession } from "./net/online-session.js"
 import { mountLanguagePicker } from "./ui/language-picker.js"
 import { OnlineScreen } from "./ui/online-screen.js"
+import { mountSurvivalUi } from "./ui/survival/index.js"
 import { ScreenManager } from "./ui/screen-manager.js"
 
 const settings = new Settings({ storage, defaults: { locale: DEFAULT_LOCALE } })
@@ -38,6 +39,7 @@ events.on("game:state", (state) => {
     document.body.dataset.gameState = state
 })
 events.on("game:setup", ({ players }) => hud.setPlayers(players))
+mountSurvivalUi({ hud, events })
 
 const app = new App({ game, screens: new ScreenManager(), events })
 mountProgression({ app, settings })

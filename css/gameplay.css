@@ -95,3 +95,28 @@ body[data-game-state="paused"] .sprite::after {
     from { transform: scaleY(1) }
     to { transform: scaleY(-0.6) }
 }
+
+/* Balloon status: blink while invulnerable, fall away when out of lives. */
+.balloon[data-effects~="invulnerable"] {
+    animation: invulnerable-blink 0.2s steps(2, jump-none) infinite;
+}
+
+body[data-game-state="paused"] .balloon {
+    animation-play-state: paused;
+}
+
+@keyframes invulnerable-blink {
+    from { opacity: 1 }
+    to { opacity: 0.25 }
+}
+
+.balloon.is-out > .sprite {
+    animation: balloon-fall 1.2s ease-in forwards;
+}
+
+@keyframes balloon-fall {
+    to {
+        transform: translateY(120vh) rotate(30deg);
+        opacity: 0;
+    }
+}
