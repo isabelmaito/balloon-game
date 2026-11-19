@@ -1,4 +1,5 @@
 import { mountDifficultyPicker } from "./difficulty-picker.js"
+import { LevelIndicator } from "./level-indicator.js"
 import { LevelSystem } from "./level-system.js"
 
 /**
@@ -9,6 +10,7 @@ export function mountProgression({ app, settings, root = document }) {
     const { game, events } = app
     const levels = new LevelSystem({ events })
     game.addSystem(levels)
+    new LevelIndicator({ element: root.getElementById("level-indicator"), events })
 
     mountDifficultyPicker(root.getElementById("difficulty-picker"), {
         settings,

@@ -42,3 +42,15 @@
     margin: 0;
     accent-color: #6b4a00;
 }
+
+.hud-level {
+    position: absolute;
+    top: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    pointer-events: none;
+    font: bold 3.2vh "Trebuchet MS", sans-serif;
+    color: #fff8dc;
+    text-shadow: 0 0.3vh 0 #6b4a00;
+}
