@@ -9,6 +9,8 @@ export class Player {
         this.score = 0
         this.lives = lives
         this.effects = new TimedEffects()
+        /** Points earned per coin value; power-ups may raise it. */
+        this.coinMultiplier = 1
     }
 
     get isOut() {

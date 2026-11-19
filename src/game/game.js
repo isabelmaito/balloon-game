@@ -183,7 +183,7 @@ export class Game {
         for (const coin of this.coins.items) {
             if (coin.isAlive && intersects(balloonHitbox, coin.bounds)) {
                 coin.destroy()
-                player.addScore(coin.value)
+                player.addScore(coin.value * player.coinMultiplier)
                 this.events.emit("coin:collected", { player, coin })
                 this.events.emit("score:changed", { player, score: player.score })
             }
