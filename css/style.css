@@ -181,3 +181,19 @@ body[data-game-state="idle"] .hud,
 body[data-game-state="idle"] .hud-level {
     visibility: hidden;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    #background,
+    .balloon > .sprite {
+        animation: none;
+    }
+
+    .button {
+        transition: none;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+        transform: none;
+    }
+}
