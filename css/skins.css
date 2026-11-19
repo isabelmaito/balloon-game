@@ -128,3 +128,26 @@
     background: radial-gradient(circle at 45% 40%, var(--star-light), var(--star-main) 45%, var(--star-shade));
     clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
 }
+
+/* Player tag shown above each balloon when several players share the field. */
+.balloon-tag {
+    position: absolute;
+    top: -12%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.2vh 0.9vh;
+    border-radius: 1vh;
+    font: bold 2.2vh "Trebuchet MS", sans-serif;
+    color: #fff;
+    background: var(--tag-color);
+    box-shadow: 0 0.3vh 0 rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
+
+.balloon-tag--p1 {
+    --tag-color: #1f6fd1;
+}
+
+.balloon-tag--p2 {
+    --tag-color: #d9480f;
+}

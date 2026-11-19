@@ -2,13 +2,15 @@ import "./messages.js"
 import { GAME_STATE } from "../game/game.js"
 import { PlayerPreferences } from "../game/player-preferences.js"
 import { PlayerSetupPanel } from "./player-setup-panel.js"
+import { PlayerTags } from "./player-tags.js"
 
 /**
  * Installs same-keyboard multiplayer: player count, skins and key bindings are
  * read from settings and written to `app.matchOptions.players` before each match.
  */
-export function installMultiplayer({ app, game, settings, root = document }) {
+export function installMultiplayer({ app, game, events, settings, root = document }) {
     const preferences = new PlayerPreferences(settings)
+    new PlayerTags({ events })
 
     const applyPreferences = () => {
         app.matchOptions.players = preferences.toMatchPlayers()
