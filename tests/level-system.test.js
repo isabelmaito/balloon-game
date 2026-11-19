@@ -15,7 +15,7 @@ function createSystem() {
     const changes = []
     events.on("level:changed", (change) => changes.push(change))
     const system = new LevelSystem({ events, levels: LEVELS, odometer: new Odometer({ metersPerSecond: 1 }) })
-    const game = { speedMultiplier: 1, levelModifiers: NEUTRAL_MODIFIERS }
+    const game = { speedMultiplier: 1, levelModifiers: NEUTRAL_MODIFIERS, isSimulating: true }
     return { system, game, changes }
 }
 
@@ -49,6 +49,33 @@ describe("LevelSystem", () => {
         game.speedMultiplier = 2
         system.update(3, game)
         assert.equal(system.distance, 6)
+    })
+
+    it("does not measure distance when the game only mirrors a host", () => {
+        const { system, game, changes } = createSystem()
+        game.isSimulating = false
+        system.setup(game)
+        system.update(20, game)
+        assert.equal(system.distance, 0)
+        assert.equal(changes.length, 1)
+    })
+
+    it("follows a distance synced from the host", () => {
+        const { system, game, changes } = createSystem()
+        game.isSimulating = false
+        system.setup(game)
+        system.syncDistance(12, game)
+        assert.equal(system.distance, 12)
+        assert.deepEqual(changes.at(-1), { level: LEVELS[1], number: 2, isFirst: false })
+        assert.deepEqual(game.levelModifiers, { speedMultiplier: 2, spawnMultiplier: 3 })
+    })
+
+    it("does not announce the same level twice when synced", () => {
+        const { system, game, changes } = createSystem()
+        system.setup(game)
+        system.syncDistance(4, game)
+        system.syncDistance(6, game)
+        assert.equal(changes.length, 1)
     })
 
     it("starts over on a new match", () => {

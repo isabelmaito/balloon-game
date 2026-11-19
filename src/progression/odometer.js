@@ -16,7 +16,12 @@ export class Odometer {
         this.#meters += deltaSeconds * this.metersPerSecond * speedMultiplier
     }
 
+    /** Jumps to a distance measured elsewhere, such as the online host's. */
+    moveTo(meters) {
+        this.#meters = meters
+    }
+
     reset() {
-        this.#meters = 0
+        this.moveTo(0)
     }
 }

@@ -29,15 +29,27 @@ export class LevelSystem {
         this.#enter(0, game)
     }
 
+    /** Only a simulating game measures distance; an online guest gets it through `syncDistance`. */
     update(deltaSeconds, game) {
+        if (!game.isSimulating) return
         this.odometer.advance(deltaSeconds, game.speedMultiplier)
-        const index = levelIndexAt(this.distance, this.levels)
-        if (index !== this.#index) this.#enter(index, game)
+        this.#followDistance(game)
+    }
+
+    /** Takes the distance measured by the online host and enters its level. */
+    syncDistance(distance, game) {
+        this.odometer.moveTo(distance)
+        this.#followDistance(game)
     }
 
     teardown(game) {
         game.levelModifiers = NEUTRAL_MODIFIERS
         this.#index = -1
+    }
+
+    #followDistance(game) {
+        const index = levelIndexAt(this.distance, this.levels)
+        if (index !== this.#index) this.#enter(index, game)
     }
 
     #enter(index, game) {
