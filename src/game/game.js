@@ -42,6 +42,8 @@ export class Game {
         this.coins.clear()
         for (const { balloon } of this.players) balloon.destroy()
         this.players = playerSetups.map((setup, index) => this.createPlayer({ ...setup, index }))
+        this.handleResize()
+        for (const { balloon } of this.players) balloon.render()
         this.#setState(GAME_STATE.IDLE)
         this.events.emit("game:setup", { players: this.players })
     }
