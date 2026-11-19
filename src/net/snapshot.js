@@ -18,6 +18,18 @@ export function toPixels({ x, y }, viewport) {
     return { x: x * viewport.width, y: y * viewport.height }
 }
 
+/** Position and size as viewport fractions: `x` and `w` of the width, `y` and `h` of the height. */
+export function toViewportBox({ x, y, width, height }, viewport) {
+    const { x: w, y: h } = toViewportFractions({ x: width, y: height }, viewport)
+    return { ...toViewportFractions({ x, y }, viewport), w, h }
+}
+
+/** Inverse of `toViewportBox`, in pixels of the local viewport. */
+export function toPixelBox({ x, y, w, h }, viewport) {
+    const { x: width, y: height } = toPixels({ x: w, y: h }, viewport)
+    return { ...toPixels({ x, y }, viewport), width, height }
+}
+
 /**
  * Share of the remaining distance to cover this frame when easing toward a
  * target at `ratePerSecond`. Frame-rate independent; 0 means stay, 1 means snap.
@@ -43,10 +55,31 @@ export class EntityIds {
     }
 }
 
-/** Compact, serializable picture of a match: balloons, scores and coins. */
-export function createSnapshot({ players, coins }, viewport, ids) {
+function describePlayer({ id, score, lives, effects, balloon }, viewport) {
     return {
-        players: players.map(({ id, score, balloon }) => ({ id, score, ...toViewportFractions(balloon, viewport) })),
+        id,
+        score,
+        lives,
+        effects: effects.active.map(({ name }) => name),
+        ...toViewportFractions(balloon, viewport),
+    }
+}
+
+/** Hazards and power-ups travel with their kind and size so the guest can rebuild them. */
+function describeKindedEntity(entity, viewport, ids) {
+    return { id: ids.idOf(entity), kind: entity.kind, ...toViewportBox(entity, viewport) }
+}
+
+/**
+ * Compact, serializable picture of a match: balloons with score, lives and
+ * effect names, coins, hazards, power-ups and the distance in meters.
+ */
+export function createSnapshot({ players, coins, hazards, powerUps, distance }, viewport, ids) {
+    return {
+        distance,
+        players: players.map((player) => describePlayer(player, viewport)),
         coins: coins.map((coin) => ({ id: ids.idOf(coin), ...toViewportFractions(coin, viewport) })),
+        hazards: hazards.map((hazard) => describeKindedEntity(hazard, viewport, ids)),
+        powerUps: powerUps.map((powerUp) => describeKindedEntity(powerUp, viewport, ids)),
     }
 }

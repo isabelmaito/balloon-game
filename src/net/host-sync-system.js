@@ -6,15 +6,24 @@ import { EntityIds, createSnapshot } from "./snapshot.js"
 /**
  * Game system for the online host: the host runs the real simulation and this
  * system broadcasts a snapshot of it at a fixed rate.
+ *
+ * `hazards` and `powerUps` are the survival systems (anything exposing
+ * `entities`) and `levels` anything exposing `distance` in meters.
  */
 export class HostSyncSystem {
     #send
     #viewport
+    #hazards
+    #powerUps
+    #levels
     #ids = new EntityIds()
     #elapsedSeconds = 0
 
-    constructor({ send, viewport = defaultViewport }) {
+    constructor({ send, hazards, powerUps, levels, viewport = defaultViewport }) {
         this.#send = send
+        this.#hazards = hazards
+        this.#powerUps = powerUps
+        this.#levels = levels
         this.#viewport = viewport
     }
 
@@ -30,7 +39,13 @@ export class HostSyncSystem {
     }
 
     broadcast(game) {
-        const snapshot = createSnapshot({ players: game.players, coins: game.coins.items }, this.#viewport, this.#ids)
+        const snapshot = createSnapshot({
+            players: game.players,
+            coins: game.coins.items,
+            hazards: this.#hazards.entities,
+            powerUps: this.#powerUps.entities,
+            distance: this.#levels.distance,
+        }, this.#viewport, this.#ids)
         this.#send(createMessage(MESSAGE_TYPE.STATE, snapshot))
     }
 }

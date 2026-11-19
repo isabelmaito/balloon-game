@@ -8,14 +8,20 @@ const VIEWPORT = { width: 1000, height: 500 }
 
 function fakeGame() {
     return {
-        players: [{ id: 1, score: 2, balloon: { x: 100, y: 250 } }],
+        players: [{ id: 1, score: 2, lives: 3, effects: { active: [] }, balloon: { x: 100, y: 250 } }],
         coins: { items: [{ x: 500, y: 0 }] },
     }
 }
 
 function createSystem() {
     const sent = []
-    const system = new HostSyncSystem({ send: (message) => sent.push(message), viewport: VIEWPORT })
+    const system = new HostSyncSystem({
+        send: (message) => sent.push(message),
+        hazards: { entities: [{ kind: "bird", x: 900, y: 100, width: 50, height: 50 }] },
+        powerUps: { entities: [] },
+        levels: { distance: 42 },
+        viewport: VIEWPORT,
+    })
     system.setup()
     return { system, sent }
 }
@@ -39,7 +45,15 @@ describe("HostSyncSystem", () => {
     it("describes the match in viewport fractions", () => {
         const { system, sent } = createSystem()
         system.broadcast(fakeGame())
-        assert.deepEqual(sent[0].players, [{ id: 1, score: 2, x: 0.1, y: 0.5 }])
+        assert.deepEqual(sent[0].players, [{ id: 1, score: 2, lives: 3, effects: [], x: 0.1, y: 0.5 }])
         assert.deepEqual(sent[0].coins.map(({ x, y }) => ({ x, y })), [{ x: 0.5, y: 0 }])
+    })
+
+    it("includes hazards, power-ups and the distance", () => {
+        const { system, sent } = createSystem()
+        system.broadcast(fakeGame())
+        assert.deepEqual(sent[0].hazards.map(({ kind, x, w }) => ({ kind, x, w })), [{ kind: "bird", x: 0.9, w: 0.05 }])
+        assert.deepEqual(sent[0].powerUps, [])
+        assert.equal(sent[0].distance, 42)
     })
 })
