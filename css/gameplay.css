@@ -1,0 +1,97 @@
+/* Hazards, lives and power-ups. Everything here is drawn with CSS only. */
+
+:root {
+    --cloud-light: #6b7387;
+    --cloud-dark: #4c5262;
+    --bolt: #ffe14d;
+    --bird-body: #2f8f83;
+    --bird-belly: #9fe0c9;
+    --bird-wing: #1f6359;
+    --bird-beak: #ff9a2e;
+    --eye-white: #ffffff;
+    --eye-pupil: #1b1b1b;
+}
+
+body[data-game-state="paused"] .sprite::before,
+body[data-game-state="paused"] .sprite::after {
+    animation-play-state: paused;
+}
+
+/* Storm cloud: overlapping puffs with a flickering lightning bolt below. */
+.storm-cloud > .sprite {
+    position: relative;
+    background:
+        radial-gradient(ellipse 30% 42% at 58% 38%, var(--cloud-light) 95%, transparent 100%),
+        radial-gradient(ellipse 25% 36% at 33% 46%, var(--cloud-light) 95%, transparent 100%),
+        radial-gradient(ellipse 21% 30% at 80% 52%, var(--cloud-dark) 95%, transparent 100%),
+        radial-gradient(ellipse 20% 28% at 17% 60%, var(--cloud-dark) 95%, transparent 100%);
+    background-size: 100% 100%;
+}
+
+.storm-cloud > .sprite::before {
+    content: "";
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    top: 48%;
+    height: 26%;
+    border-radius: 50vh;
+    background: var(--cloud-dark);
+}
+
+.storm-cloud > .sprite::after {
+    content: "";
+    position: absolute;
+    left: 42%;
+    top: 62%;
+    width: 22%;
+    height: 45%;
+    background: var(--bolt);
+    clip-path: polygon(40% 0, 100% 0, 65% 40%, 95% 40%, 20% 100%, 40% 55%, 5% 55%);
+    animation: bolt-flicker 1.4s steps(1, end) infinite;
+}
+
+@keyframes bolt-flicker {
+    0%, 60%, 80% { opacity: 1 }
+    70%, 90% { opacity: 0 }
+}
+
+/* Bird: round body facing left, flapping wing and a pointed beak. */
+.bird > .sprite {
+    position: relative;
+    background:
+        radial-gradient(ellipse 4% 4% at 27% 40%, var(--eye-pupil) 80%, transparent 100%),
+        radial-gradient(ellipse 8% 8% at 29% 40%, var(--eye-white) 90%, transparent 100%),
+        radial-gradient(ellipse 26% 16% at 52% 66%, var(--bird-belly) 95%, transparent 100%),
+        radial-gradient(ellipse 40% 30% at 52% 55%, var(--bird-body) 95%, transparent 100%);
+    background-size: 100% 100%;
+}
+
+.bird > .sprite::before {
+    content: "";
+    position: absolute;
+    left: 42%;
+    top: 22%;
+    width: 38%;
+    height: 34%;
+    background: var(--bird-wing);
+    clip-path: polygon(0 100%, 100% 100%, 85% 0, 60% 35%, 40% 5%);
+    transform-origin: 50% 100%;
+    animation: wing-flap 0.35s ease-in-out infinite alternate;
+}
+
+.bird > .sprite::after {
+    content: "";
+    position: absolute;
+    left: 2%;
+    top: 46%;
+    width: 14%;
+    height: 12%;
+    background: var(--bird-beak);
+    clip-path: polygon(0 50%, 100% 0, 100% 100%);
+}
+
+@keyframes wing-flap {
+    from { transform: scaleY(1) }
+    to { transform: scaleY(-0.6) }
+}
