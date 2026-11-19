@@ -65,3 +65,62 @@ export function decodeSignal(code, expectedType) {
     }
     return { type: signal.type, sdp: signal.sdp }
 }
+
+/** Messages sent over the data channel once peers are connected. */
+export const MESSAGE_TYPE = Object.freeze({
+    HELLO: "hello",
+    INPUT: "input",
+    STATE: "state",
+    START: "start",
+    PAUSE: "pause",
+    OVER: "over",
+    LEAVE: "leave",
+})
+
+const AXIS_VALUES = new Set([-1, 0, 1])
+
+const isAxis = (value) => AXIS_VALUES.has(value)
+const isId = (value) => Number.isInteger(value) && value >= 0
+const isNumber = (value) => Number.isFinite(value)
+const isListOf = (value, isItem) => Array.isArray(value) && value.every(isItem)
+
+const isDirection = (value) => isObject(value) && isAxis(value.x) && isAxis(value.y)
+const isPosition = (value) => isObject(value) && isNumber(value.x) && isNumber(value.y)
+const isScore = (value) => isObject(value) && isId(value.id) && isNumber(value.score)
+const isPlayerState = (value) => isPosition(value) && isScore(value)
+const isCoinState = (value) => isPosition(value) && isId(value.id)
+
+const VALIDATORS = Object.freeze({
+    [MESSAGE_TYPE.HELLO]: (message) => Number.isInteger(message.version),
+    [MESSAGE_TYPE.INPUT]: (message) => isDirection(message.direction),
+    [MESSAGE_TYPE.STATE]: (message) => isListOf(message.players, isPlayerState)
+        && isListOf(message.coins, isCoinState),
+    [MESSAGE_TYPE.START]: (message) => typeof message.difficulty === "string",
+    [MESSAGE_TYPE.PAUSE]: (message) => typeof message.paused === "boolean",
+    [MESSAGE_TYPE.OVER]: (message) => isListOf(message.scores, isScore),
+    [MESSAGE_TYPE.LEAVE]: () => true,
+})
+
+export function isValidMessage(message) {
+    return isObject(message) && Object.hasOwn(VALIDATORS, message.type) && VALIDATORS[message.type](message)
+}
+
+/** Builds a message, throwing early when the payload would be rejected by the peer. */
+export function createMessage(type, payload = {}) {
+    const message = { ...payload, type }
+    if (!isValidMessage(message)) throw new ProtocolError(`Invalid ${type} message`)
+    return message
+}
+
+export function encodeMessage(message) {
+    if (!isValidMessage(message)) throw new ProtocolError(`Invalid ${message?.type} message`)
+    return JSON.stringify(message)
+}
+
+/** Parses data received from the peer. Throws `ProtocolError` on anything unexpected. */
+export function decodeMessage(text) {
+    if (typeof text !== "string") throw new ProtocolError("Message is not text")
+    const message = parseJson(text)
+    if (!isValidMessage(message)) throw new ProtocolError(`Invalid ${message?.type} message`)
+    return message
+}
