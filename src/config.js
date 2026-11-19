@@ -27,6 +27,7 @@ export const HAZARD = {
 export const HAZARDS = {
     stormCloud: {
         sizeRatio: 0.22,
+        aspectRatio: 0.7,
         speedRatio: 0.28,
     },
     bird: {
