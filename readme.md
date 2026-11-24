@@ -8,6 +8,18 @@ longe possível, sozinho, com alguém no mesmo teclado ou online.
   <img src="screenshots/v4/gameplay.gif" alt="Balão desviando de uma nuvem de tempestade e de um pássaro enquanto coleta moedas" width="600">
 </p>
 
+## Como jogar
+
+<img src="screenshots/v4/menu.jpg" alt="Menu principal com dificuldade, jogadores, balão e idioma" width="420" align="right">
+
+1. No menu, escolha a dificuldade, quantos jogadores, o balão de cada um e o idioma.
+2. Clique em **Jogar**. O cenário rola sozinho; você só move o balão.
+3. Pegue moedas para somar pontos e bolhas de power-up para ganhar vantagens.
+4. Desvie das nuvens de tempestade e dos pássaros: cada batida custa uma vida.
+5. Quanto mais longe, mais rápido fica. A partida termina quando todos ficam sem vidas.
+
+<br clear="right">
+
 ## Funcionalidades
 
 - **Fases**: dia, pôr do sol, noite e tempestade, cada uma mais rápida que a anterior.
