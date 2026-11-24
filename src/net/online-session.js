@@ -1,5 +1,6 @@
 import { DEFAULT_DIFFICULTY } from "../game/difficulty.js"
 import { GAME_STATE } from "../game/game.js"
+import { PLAYER_DEFAULT_SKINS, resolveSkin } from "../game/skins.js"
 import { GUEST_PLAYER_ID, HOST_PLAYER_ID, LOCAL_BINDINGS, PROTOCOL_VERSION } from "./config.js"
 import { GuestSyncSystem } from "./guest-sync-system.js"
 import { HostSyncSystem } from "./host-sync-system.js"
@@ -35,6 +36,8 @@ export class OnlineSession {
     #peer = null
     #system = null
     #remoteControls = new RemoteControls()
+    /** Skin the other peer announced in its `hello`. */
+    #remoteSkin = null
     #handlers
     #lastGameState = null
     #send = (message) => this.#peer?.send(message)
@@ -55,7 +58,7 @@ export class OnlineSession {
             [MESSAGE_TYPE.HELLO]: (message) => this.#greet(message),
             [MESSAGE_TYPE.INPUT]: ({ direction }) => this.#remoteControls.setDirection(direction),
             [MESSAGE_TYPE.STATE]: (snapshot) => this.#system?.receive?.(snapshot),
-            [MESSAGE_TYPE.START]: ({ difficulty }) => this.#startAsGuest(difficulty),
+            [MESSAGE_TYPE.START]: (message) => this.#startAsGuest(message),
             [MESSAGE_TYPE.PAUSE]: ({ paused }) => this.#mirrorPause(paused),
             [MESSAGE_TYPE.OVER]: ({ scores }) => this.#finishAsGuest(scores),
             [MESSAGE_TYPE.LEAVE]: () => this.#end(END_REASON.PEER_LEFT),
@@ -97,14 +100,15 @@ export class OnlineSession {
     startMatch() {
         if (!this.isHost || !this.isConnected) return
         const difficulty = this.#app.matchOptions.difficulty ?? DEFAULT_DIFFICULTY
-        this.#peer.send(createMessage(MESSAGE_TYPE.START, { difficulty }))
+        const skin = this.#localSkin
+        this.#peer.send(createMessage(MESSAGE_TYPE.START, { difficulty, skin }))
         this.#remoteControls.reset()
         this.#app.play({
             ...this.#app.matchOptions,
             difficulty,
             players: [
-                { id: HOST_PLAYER_ID, bindings: LOCAL_BINDINGS },
-                { id: GUEST_PLAYER_ID, controls: this.#remoteControls },
+                { id: HOST_PLAYER_ID, bindings: LOCAL_BINDINGS, skin },
+                { id: GUEST_PLAYER_ID, controls: this.#remoteControls, skin: this.#remoteSkin },
             ],
         })
     }
@@ -129,17 +133,28 @@ export class OnlineSession {
     }
 
     #handlePeerState(state) {
-        if (state === PEER_STATE.OPEN) this.#peer.send(createMessage(MESSAGE_TYPE.HELLO, { version: PROTOCOL_VERSION }))
+        if (state === PEER_STATE.OPEN) this.#sayHello()
         else if (state === PEER_STATE.CLOSED) this.#end(END_REASON.CONNECTION_LOST)
     }
 
-    #greet({ version }) {
+    /** Every peer greets with its protocol version and the skin its own balloon will wear. */
+    #sayHello() {
+        this.#peer.send(createMessage(MESSAGE_TYPE.HELLO, { version: PROTOCOL_VERSION, skin: this.#localSkin }))
+    }
+
+    /** The local player-1 skin chosen in the menu. */
+    get #localSkin() {
+        return resolveSkin(this.#app.matchOptions.players?.[0]?.skin)
+    }
+
+    #greet({ version, skin }) {
         if (version !== PROTOCOL_VERSION) {
             this.#end(END_REASON.VERSION_MISMATCH)
             return
         }
         if (this.isConnected) return
         this.isConnected = true
+        this.#remoteSkin = resolveSkin(skin, PLAYER_DEFAULT_SKINS[GUEST_PLAYER_ID - 1])
         this.#system = this.isHost
             ? this.#createHostSync()
             : new GuestSyncSystem({ send: this.#send, levels: this.#levels })
@@ -152,14 +167,14 @@ export class OnlineSession {
         return new HostSyncSystem({ send: this.#send, hazards, powerUps, levels: this.#levels })
     }
 
-    #startAsGuest(difficulty) {
+    #startAsGuest({ difficulty, skin }) {
         if (!this.isGuest) return
         this.#app.play({
             difficulty,
             simulate: false,
             players: [
-                { id: HOST_PLAYER_ID, controls: new RemoteControls() },
-                { id: GUEST_PLAYER_ID, bindings: LOCAL_BINDINGS },
+                { id: HOST_PLAYER_ID, controls: new RemoteControls(), skin },
+                { id: GUEST_PLAYER_ID, bindings: LOCAL_BINDINGS, skin: this.#localSkin },
             ],
         })
     }
@@ -216,6 +231,7 @@ export class OnlineSession {
         this.#peer = null
         this.#system = null
         this.#remoteControls.reset()
+        this.#remoteSkin = null
         this.role = null
         this.isConnected = false
     }

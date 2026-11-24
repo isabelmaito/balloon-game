@@ -1,6 +1,7 @@
 import { POWER_UPS } from "../config.js"
 import { HAZARD_KIND } from "../entities/hazard.js"
 import { EFFECT } from "../game/effect-names.js"
+import { isSkin } from "../game/skins.js"
 
 /**
  * Pure wire format of the online mode: signaling codes exchanged by hand and
@@ -100,19 +101,21 @@ const isScore = (value) => isObject(value) && isId(value.id) && isNumber(value.s
 const isEffectName = (value) => EFFECT_NAMES.has(value)
 const isPlayerState = (value) => isPosition(value) && isScore(value)
     && isCount(value.lives) && isListOf(value.effects, isEffectName)
+/** Optional in `hello` so a peer on an older version still reaches the version check. */
+const isOptionalSkin = (value) => value === undefined || isSkin(value)
 const isCoinState = (value) => isPosition(value) && isId(value.id)
 const isHazardState = (value) => isBox(value) && isId(value.id) && HAZARD_KINDS.has(value.kind)
 const isPowerUpState = (value) => isBox(value) && isId(value.id) && POWER_UP_KINDS.has(value.kind)
 
 const VALIDATORS = Object.freeze({
-    [MESSAGE_TYPE.HELLO]: (message) => Number.isInteger(message.version),
+    [MESSAGE_TYPE.HELLO]: (message) => Number.isInteger(message.version) && isOptionalSkin(message.skin),
     [MESSAGE_TYPE.INPUT]: (message) => isDirection(message.direction),
     [MESSAGE_TYPE.STATE]: (message) => isListOf(message.players, isPlayerState)
         && isListOf(message.coins, isCoinState)
         && isListOf(message.hazards, isHazardState)
         && isListOf(message.powerUps, isPowerUpState)
         && isDistance(message.distance),
-    [MESSAGE_TYPE.START]: (message) => typeof message.difficulty === "string",
+    [MESSAGE_TYPE.START]: (message) => typeof message.difficulty === "string" && isSkin(message.skin),
     [MESSAGE_TYPE.PAUSE]: (message) => typeof message.paused === "boolean",
     [MESSAGE_TYPE.OVER]: (message) => isListOf(message.scores, isScore),
     [MESSAGE_TYPE.LEAVE]: () => true,

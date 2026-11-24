@@ -81,7 +81,7 @@ describe("data channel messages", () => {
             distance: 321.5,
         }),
         createMessage(MESSAGE_TYPE.STATE, EMPTY_STATE),
-        createMessage(MESSAGE_TYPE.START, { difficulty: "hard" }),
+        createMessage(MESSAGE_TYPE.START, { difficulty: "hard", skin: "star" }),
         createMessage(MESSAGE_TYPE.PAUSE, { paused: true }),
         createMessage(MESSAGE_TYPE.OVER, { scores: [{ id: 1, score: 2 }, { id: 2, score: 5 }] }),
         createMessage(MESSAGE_TYPE.LEAVE),
