@@ -41,6 +41,19 @@ export const PROGRESSION_MESSAGES = Object.freeze({
         "hud.level": "Fase {number}",
         "gameOver.distance": "Distancia recorrida: {distance} m",
     },
+    fr: {
+        "menu.difficulty": "Difficulté",
+        "difficulty.easy": "Facile",
+        "difficulty.normal": "Normal",
+        "difficulty.hard": "Difficile",
+        "level.name.day": "Jour",
+        "level.name.sunset": "Coucher de soleil",
+        "level.name.night": "Nuit",
+        "level.name.storm": "Orage",
+        "level.banner": "Niveau {number} — {name}",
+        "hud.level": "Niveau {number}",
+        "gameOver.distance": "Distance parcourue : {distance} m",
+    },
 })
 
 registerMessages(PROGRESSION_MESSAGES)
