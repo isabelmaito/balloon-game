@@ -8,6 +8,20 @@ longe possível, sozinho, com alguém no mesmo teclado ou online.
   <img src="screenshots/v4/gameplay.gif" alt="Balão desviando de uma nuvem de tempestade e de um pássaro enquanto coleta moedas" width="600">
 </p>
 
+## Funcionalidades
+
+- **[Fases](#fases)**: dia, pôr do sol, noite e tempestade, cada uma mais rápida que a anterior.
+- **[Dificuldades](#obstáculos-vidas-e-power-ups)**: fácil, normal e difícil (velocidade, frequência de obstáculos e vidas).
+- **[Obstáculos e vidas](#obstáculos-vidas-e-power-ups)**: nuvens de tempestade e pássaros tiram vidas; o balão
+  pisca enquanto está invulnerável.
+- **[Power-ups](#obstáculos-vidas-e-power-ups)**: escudo, ímã de moedas e moedas em dobro.
+- **[Balões](#balões)**: clássico, festa, balão de ar quente, coração e estrela.
+- **[Multijogador local](#dois-jogadores-no-mesmo-teclado)**: dois jogadores no mesmo teclado.
+- **[Multijogador online](#jogando-online)**: dois navegadores conectados por WebRTC, sem servidor.
+- **[Teclas configuráveis](#controles)** para cada jogador.
+- **[Recordes, estatísticas e conquistas](#recordes-e-conquistas)** salvos no navegador.
+- **Idiomas**: português, inglês, espanhol e francês.
+
 ## Como jogar
 
 <img src="screenshots/v4/menu.jpg" alt="Menu principal com dificuldade, jogadores, balão e idioma" width="420" align="right">
@@ -86,20 +100,6 @@ conquistas ficam salvos no navegador.
   <img src="screenshots/v4/game-over.jpg" alt="Tela de fim de jogo com novo recorde, pontos e distância percorrida" width="400">
   <img src="screenshots/v4/achievements.jpg" alt="Tela de conquistas com uma desbloqueada e o progresso das outras" width="400">
 </p>
-
-## Funcionalidades
-
-- **Fases**: dia, pôr do sol, noite e tempestade, cada uma mais rápida que a anterior.
-- **Dificuldades**: fácil, normal e difícil (velocidade, frequência de obstáculos e vidas).
-- **Obstáculos e vidas**: nuvens de tempestade e pássaros tiram vidas; o balão pisca
-  enquanto está invulnerável.
-- **Power-ups**: escudo, ímã de moedas e moedas em dobro.
-- **Balões**: clássico, festa, balão de ar quente, coração e estrela.
-- **Multijogador local**: dois jogadores no mesmo teclado.
-- **Multijogador online**: dois navegadores conectados por WebRTC, sem servidor.
-- **Teclas configuráveis** para cada jogador.
-- **Recordes, estatísticas e conquistas** salvos no navegador.
-- **Idiomas**: português, inglês, espanhol e francês.
 
 ## Como rodar
 
