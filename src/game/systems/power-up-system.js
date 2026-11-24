@@ -1,9 +1,10 @@
 import { POWER_UP, POWER_UPS } from "../../config.js"
 import { viewport } from "../../core/viewport.js"
 import { PowerUp } from "../../entities/power-up.js"
-import { pickRandom, randomBetween } from "../../utils/math.js"
+import { pickRandom } from "../../utils/math.js"
 import { EFFECT } from "../effect-names.js"
 import { attract, centerOf } from "../magnet.js"
+import { rightEdgeSpawn } from "../spawn-position.js"
 import { emitEffectsChanged } from "./effects-system.js"
 import { ScrollingSpawnSystem } from "./scrolling-spawn-system.js"
 
@@ -22,8 +23,7 @@ export class PowerUpSystem extends ScrollingSpawnSystem {
     createEntity(game) {
         const size = viewport.height * POWER_UP.sizeRatio
         return new PowerUp({
-            x: viewport.width,
-            y: randomBetween(0, viewport.height - size),
+            ...rightEdgeSpawn(viewport, size),
             size,
             speed: viewport.height * POWER_UP.speedRatio * game.speedMultiplier,
             kind: pickRandom(POWER_UP_KINDS),
