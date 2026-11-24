@@ -31,11 +31,12 @@ export class HighScoresView {
     }
 
     #statLines() {
-        const { wallet, matchesPlayed, bestScore, longestMatchSeconds } = this.store.stats
+        const { wallet, matchesPlayed, longestMatchSeconds } = this.store.stats
         return [
             t("progress.stats.wallet", { value: wallet }),
             t("progress.stats.matchesPlayed", { value: matchesPlayed }),
-            t("progress.stats.bestScore", { value: bestScore }),
+            // The table only holds finished matches, so it is the one source for the best score.
+            t("progress.stats.bestScore", { value: this.highScores.best }),
             t("progress.stats.longestMatch", { value: formatDuration(longestMatchSeconds) }),
         ]
     }
