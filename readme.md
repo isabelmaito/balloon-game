@@ -139,8 +139,10 @@ trocam códigos manualmente, por qualquer mensageiro.
 
 A partida roda no navegador de quem hospeda; o outro navegador envia só os comandos
 e recebe o estado do jogo. Pausar de um lado pausa os dois, e trocar de aba também
-pausa a partida. Redes muito restritivas
-(alguns NATs corporativos) podem impedir a conexão, porque o jogo usa apenas STUN.
+pausa a partida.
+
+Redes muito restritivas (alguns NATs corporativos) podem impedir a conexão, porque o
+jogo usa apenas STUN.
 
 ## Estrutura do projeto
 
