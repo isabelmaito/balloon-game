@@ -176,17 +176,19 @@ Veja [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Versões anteriores
 
+<details>
+<summary>Ver como o jogo começou (V1 a V3)</summary>
+
 V1:
 
-
-![Balloon Game Screenshot](screenshots/Drifblim.gif)
+![Balloon Game V1](screenshots/Drifblim.gif)
 
 V2:
 
-
-![Balloon Game Screenshot](screenshots/Drifblim2.gif)
+![Balloon Game V2](screenshots/Drifblim2.gif)
 
 V3:
 
+![Balloon Game V3](screenshots/Drifblim3.gif)
 
-![Balloon Game Screenshot](screenshots/Drifblim3.gif)
+</details>
