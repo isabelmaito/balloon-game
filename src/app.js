@@ -25,6 +25,7 @@ export class App {
             if (action) this.runAction(action)
         })
         document.addEventListener("keydown", this.handleKeyDown)
+        document.addEventListener("visibilitychange", () => this.pauseWhenHidden())
         this.events.on("game:over", ({ players }) => this.showResults(players))
         this.showMenu()
     }
@@ -59,6 +60,14 @@ export class App {
             return item
         }))
         this.screens.show("game-over")
+    }
+
+    /**
+     * Browsers stop animation frames in background tabs, which froze the match
+     * mid-air (and, online, froze the guest too). Pausing makes it explicit.
+     */
+    pauseWhenHidden() {
+        if (document.hidden && this.game.state === GAME_STATE.RUNNING) this.pause()
     }
 
     pause() {
