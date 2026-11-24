@@ -7,10 +7,12 @@ import { GAME_STATE } from "../game.js"
 /**
  * Base for systems that spawn scrolling entities and react when a balloon
  * touches one. Subclasses implement `createEntity(game)` and
- * `onTouch(player, entity, game)`, and may override `spawnRate(game)`.
+ * `onTouch(player, entity, game)`, and may override `spawnRate(game)` and
+ * `sharedGroup(game)`.
  */
 export class ScrollingSpawnSystem {
     #group = null
+    #ownsGroup = true
     #spawner = null
 
     constructor({ minInterval, maxInterval, entityHitboxRatio = 1 }) {
@@ -24,7 +26,9 @@ export class ScrollingSpawnSystem {
     }
 
     setup(game) {
-        this.#group = new EntityGroup(game.playfield)
+        const shared = this.sharedGroup(game)
+        this.#ownsGroup = !shared
+        this.#group = shared ?? new EntityGroup(game.playfield)
         this.#spawner = new Spawner({
             spawn: () => this.#group.add(this.createEntity(game)),
             minInterval: this.minInterval,
@@ -33,7 +37,15 @@ export class ScrollingSpawnSystem {
     }
 
     teardown() {
-        this.#group?.clear()
+        if (this.#ownsGroup) this.#group?.clear()
+    }
+
+    /**
+     * A group owned by someone else to spawn into, or null for a private one.
+     * The owner of a shared group clears and renders it.
+     */
+    sharedGroup(_game) {
+        return null
     }
 
     /** Multiplier applied to elapsed time before it reaches the spawner. */
@@ -50,7 +62,7 @@ export class ScrollingSpawnSystem {
             if (!player.isOut) this.#touchOverlapping(player, game)
         }
         this.#group.prune()
-        if (game.state === GAME_STATE.RUNNING) this.#group.render()
+        if (this.#ownsGroup && game.state === GAME_STATE.RUNNING) this.#group.render()
     }
 
     #touchOverlapping(player, game) {

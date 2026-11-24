@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, it, mock } from "node:test"
 import assert from "node:assert/strict"
+import { EntityGroup } from "../src/core/entity-group.js"
 import { GAME_STATE } from "../src/game/game.js"
 import { ScrollingSpawnSystem } from "../src/game/systems/scrolling-spawn-system.js"
 import { createFakeElement } from "./helpers/fake-dom.js"
@@ -135,5 +136,44 @@ describe("ScrollingSpawnSystem", () => {
         system.teardown()
         assert.equal(system.entities.length, 0)
         assert.deepEqual(game.playfield.children, [])
+    })
+
+    describe("with a shared group", () => {
+        class SharedGroupSystem extends TestSystem {
+            sharedGroup(game) {
+                return game.shared
+            }
+        }
+
+        function createSharedSystem() {
+            const playfield = createFakeElement()
+            const game = {
+                playfield,
+                shared: new EntityGroup(playfield),
+                players: [fakePlayer(1)],
+                state: GAME_STATE.RUNNING,
+                isSimulating: true,
+                rate: 1,
+            }
+            const system = new SharedGroupSystem()
+            system.setup(game)
+            return { system, game }
+        }
+
+        it("spawns into the shared group", () => {
+            const { system, game } = createSharedSystem()
+            system.update(INTERVAL, game)
+            assert.equal(game.shared.items.length, 1)
+            assert.deepEqual(system.entities, game.shared.items)
+        })
+
+        it("leaves rendering and clearing to the group owner", () => {
+            const { system, game } = createSharedSystem()
+            system.update(INTERVAL, game)
+            system.update(0, game)
+            assert.equal(game.shared.items[0].renders, 0)
+            system.teardown()
+            assert.equal(game.shared.items.length, 1)
+        })
     })
 })
