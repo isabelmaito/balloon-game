@@ -57,6 +57,15 @@ O céu muda conforme a distância percorrida, e cada fase deixa o jogo mais ráp
   <img src="screenshots/v4/level-storm.jpg" alt="Fase 4, tempestade, com o aviso de nova fase e uma conquista desbloqueada" width="400">
 </p>
 
+## Balões
+
+<p align="center">
+  <img src="screenshots/v4/balloons.jpg" alt="Os cinco balões: clássico, festa, ar quente, coração e estrela" width="700">
+</p>
+
+Clássico, festa, ar quente, coração e estrela. Cada jogador escolhe o seu no menu;
+os quatro novos são desenhados só com CSS.
+
 ## Funcionalidades
 
 - **Fases**: dia, pôr do sol, noite e tempestade, cada uma mais rápida que a anterior.
