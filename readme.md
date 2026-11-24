@@ -41,6 +41,22 @@ longe possível, sozinho, com alguém no mesmo teclado ou online.
 Depois de uma batida o balão pisca e fica alguns instantes invulnerável. Os efeitos
 ativos aparecem no HUD, ao lado das vidas.
 
+## Fases
+
+O céu muda conforme a distância percorrida, e cada fase deixa o jogo mais rápido.
+
+| Fase | Começa em | Velocidade extra |
+| --- | --- | --- |
+| 1. Dia | 0 m | — |
+| 2. Pôr do sol | 500 m | +10% |
+| 3. Noite | 1200 m | +20% |
+| 4. Tempestade | 2000 m | +35% |
+
+<p align="center">
+  <img src="screenshots/v4/level-night.jpg" alt="Fase 3, noite, com o aviso de nova fase na tela" width="400">
+  <img src="screenshots/v4/level-storm.jpg" alt="Fase 4, tempestade, com o aviso de nova fase e uma conquista desbloqueada" width="400">
+</p>
+
 ## Funcionalidades
 
 - **Fases**: dia, pôr do sol, noite e tempestade, cada uma mais rápida que a anterior.
