@@ -16,7 +16,7 @@ longe possível, sozinho, com alguém no mesmo teclado ou online.
 - **Multijogador online**: dois navegadores conectados por WebRTC, sem servidor.
 - **Teclas configuráveis** para cada jogador.
 - **Recordes, estatísticas e conquistas** salvos no navegador.
-- **Idiomas**: português, inglês e espanhol.
+- **Idiomas**: português, inglês, espanhol e francês.
 
 ## Como rodar
 
