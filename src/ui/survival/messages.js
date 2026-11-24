@@ -22,6 +22,13 @@ export const SURVIVAL_MESSAGES = {
         "effect.magnet": "Imán",
         "effect.doubleCoins": "Monedas dobles",
     },
+    fr: {
+        "hud.lives": "Vies : {lives}",
+        "hud.effects": "Effets actifs",
+        "effect.shield": "Bouclier",
+        "effect.magnet": "Aimant",
+        "effect.doubleCoins": "Pièces doublées",
+    },
 }
 
 registerMessages(SURVIVAL_MESSAGES)
