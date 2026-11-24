@@ -4,6 +4,10 @@ Jogo de balão feito com HTML, CSS e JavaScript puro, sem bibliotecas nem bundle
 Desvie de nuvens de tempestade e pássaros, junte moedas e power-ups e chegue o mais
 longe possível, sozinho, com alguém no mesmo teclado ou online.
 
+<p align="center">
+  <img src="screenshots/v4/gameplay.gif" alt="Balão desviando de uma nuvem de tempestade e de um pássaro enquanto coleta moedas" width="600">
+</p>
+
 ## Funcionalidades
 
 - **Fases**: dia, pôr do sol, noite e tempestade, cada uma mais rápida que a anterior.
