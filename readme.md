@@ -120,8 +120,12 @@ servidor estático serve.
 | Mover | Setas | W A S D |
 | Pausar / continuar | Esc ou P | Esc ou P |
 
-As teclas podem ser trocadas em **Controles**, no menu principal. Esc e P ficam
-reservadas para a pausa.
+As teclas podem ser trocadas em **Controles**, no menu principal: clique em
+**Alterar** e aperte a nova tecla. Esc e P ficam reservadas para a pausa.
+
+<p align="center">
+  <img src="screenshots/v4/controls.jpg" alt="Tela de controles com as teclas dos dois jogadores" width="500">
+</p>
 
 ## Jogando online
 
