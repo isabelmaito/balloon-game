@@ -51,7 +51,8 @@ trocam códigos manualmente, por qualquer mensageiro.
 3. Quem hospeda cola a resposta, clica em **Conectar** e depois em **Iniciar partida**.
 
 A partida roda no navegador de quem hospeda; o outro navegador envia só os comandos
-e recebe o estado do jogo. Pausar de um lado pausa os dois. Redes muito restritivas
+e recebe o estado do jogo. Pausar de um lado pausa os dois, e trocar de aba também
+pausa a partida. Redes muito restritivas
 (alguns NATs corporativos) podem impedir a conexão, porque o jogo usa apenas STUN.
 
 ## Estrutura do projeto
