@@ -1,7 +1,8 @@
 import { DEFAULT_DIFFICULTY } from "../game/difficulty.js"
 import { GAME_STATE } from "../game/game.js"
 import { PLAYER_DEFAULT_SKINS, resolveSkin } from "../game/skins.js"
-import { GUEST_PLAYER_ID, HOST_PLAYER_ID, LOCAL_BINDINGS, PROTOCOL_VERSION } from "./config.js"
+import { PLAYER_DEFAULT_BINDINGS } from "../input/bindings.js"
+import { GUEST_PLAYER_ID, HOST_PLAYER_ID, PROTOCOL_VERSION } from "./config.js"
 import { GuestSyncSystem } from "./guest-sync-system.js"
 import { HostSyncSystem } from "./host-sync-system.js"
 import { PEER_STATE, PeerConnection } from "./peer-connection.js"
@@ -100,14 +101,14 @@ export class OnlineSession {
     startMatch() {
         if (!this.isHost || !this.isConnected) return
         const difficulty = this.#app.matchOptions.difficulty ?? DEFAULT_DIFFICULTY
-        const skin = this.#localSkin
-        this.#peer.send(createMessage(MESSAGE_TYPE.START, { difficulty, skin }))
+        const local = this.#localPlayer
+        this.#peer.send(createMessage(MESSAGE_TYPE.START, { difficulty, skin: local.skin }))
         this.#remoteControls.reset()
         this.#app.play({
             ...this.#app.matchOptions,
             difficulty,
             players: [
-                { id: HOST_PLAYER_ID, bindings: LOCAL_BINDINGS, skin },
+                { id: HOST_PLAYER_ID, ...local },
                 { id: GUEST_PLAYER_ID, controls: this.#remoteControls, skin: this.#remoteSkin },
             ],
         })
@@ -139,12 +140,20 @@ export class OnlineSession {
 
     /** Every peer greets with its protocol version and the skin its own balloon will wear. */
     #sayHello() {
-        this.#peer.send(createMessage(MESSAGE_TYPE.HELLO, { version: PROTOCOL_VERSION, skin: this.#localSkin }))
+        const { skin } = this.#localPlayer
+        this.#peer.send(createMessage(MESSAGE_TYPE.HELLO, { version: PROTOCOL_VERSION, skin }))
     }
 
-    /** The local player-1 skin chosen in the menu. */
-    get #localSkin() {
-        return resolveSkin(this.#app.matchOptions.players?.[0]?.skin)
+    /**
+     * Each peer steers its own balloon like the local player 1 would: with the
+     * keys and skin chosen in the menu (`app.matchOptions.players[0]`).
+     */
+    get #localPlayer() {
+        const [setup] = this.#app.matchOptions.players ?? []
+        return {
+            bindings: setup?.bindings ?? PLAYER_DEFAULT_BINDINGS[0],
+            skin: resolveSkin(setup?.skin),
+        }
     }
 
     #greet({ version, skin }) {
@@ -174,7 +183,7 @@ export class OnlineSession {
             simulate: false,
             players: [
                 { id: HOST_PLAYER_ID, controls: new RemoteControls(), skin },
-                { id: GUEST_PLAYER_ID, bindings: LOCAL_BINDINGS, skin: this.#localSkin },
+                { id: GUEST_PLAYER_ID, ...this.#localPlayer },
             ],
         })
     }

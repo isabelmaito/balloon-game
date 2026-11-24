@@ -1,5 +1,3 @@
-import { DEFAULT_BINDINGS } from "../input/bindings.js"
-
 /** Settings for the peer-to-peer online mode. */
 
 /** Bumped whenever the message format changes, so mismatched builds refuse to play. */
@@ -30,6 +28,3 @@ export const GUEST_SMOOTHING_RATE = 15
 
 export const HOST_PLAYER_ID = 1
 export const GUEST_PLAYER_ID = 2
-
-/** Each peer steers its own balloon with these keys. */
-export const LOCAL_BINDINGS = DEFAULT_BINDINGS.arrows
