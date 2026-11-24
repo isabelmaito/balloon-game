@@ -130,8 +130,7 @@ export class Game {
     /** `controls` may be given directly (e.g. a network source); otherwise keys from `bindings` are used. */
     createPlayer({ id, bindings, skin, controls = new Controls(this.keyboard, bindings), index = 0 }) {
         const balloon = new Balloon({
-            x: viewport.width * BALLOON.startXRatio,
-            y: viewport.height * (BALLOON.startYRatio + index * BALLOON.playerOffsetRatio),
+            ...this.#spawnPoint(index),
             size: viewport.height * BALLOON.sizeRatio,
             speed: viewport.height * BALLOON.speedRatio,
             skin,
@@ -140,10 +139,22 @@ export class Game {
         return new Player({ id, balloon, controls, lives: this.difficulty.lives })
     }
 
-    /** Keeps balloons proportional to the viewport, which may be 0 before first layout. */
+    #spawnPoint(index) {
+        return {
+            x: viewport.width * BALLOON.startXRatio,
+            y: viewport.height * (BALLOON.startYRatio + index * BALLOON.playerOffsetRatio),
+        }
+    }
+
+    /**
+     * Keeps balloons proportional to the viewport, which may be 0 before first
+     * layout (e.g. a page opened in a background tab). Before the match starts
+     * the balloons also return to their spawn point.
+     */
     handleResize() {
         const size = viewport.height * BALLOON.sizeRatio
-        for (const { balloon } of this.players) {
+        for (const [index, { balloon }] of this.players.entries()) {
+            if (this.state === GAME_STATE.IDLE) Object.assign(balloon, this.#spawnPoint(index))
             balloon.resize(size, size)
             balloon.speed = viewport.height * BALLOON.speedRatio
             balloon.keepInside(viewport)
