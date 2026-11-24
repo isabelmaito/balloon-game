@@ -76,6 +76,17 @@ Cada um tem seu placar e suas vidas, e a partida só acaba quando os dois caem.
   <img src="screenshots/v4/two-players.jpg" alt="Partida com dois jogadores, placar e vidas de cada um no topo" width="400">
 </p>
 
+## Recordes e conquistas
+
+No fim da partida aparecem os pontos de cada jogador, a distância percorrida e o
+aviso de novo recorde. Os cinco melhores resultados, as estatísticas e as 10
+conquistas ficam salvos no navegador.
+
+<p align="center">
+  <img src="screenshots/v4/game-over.jpg" alt="Tela de fim de jogo com novo recorde, pontos e distância percorrida" width="400">
+  <img src="screenshots/v4/achievements.jpg" alt="Tela de conquistas com uma desbloqueada e o progresso das outras" width="400">
+</p>
+
 ## Funcionalidades
 
 - **Fases**: dia, pôr do sol, noite e tempestade, cada uma mais rápida que a anterior.
