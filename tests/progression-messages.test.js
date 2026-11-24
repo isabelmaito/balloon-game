@@ -1,6 +1,7 @@
 import { describe, it } from "node:test"
 import assert from "node:assert/strict"
 import { DIFFICULTIES } from "../src/game/difficulty.js"
+import { LOCALES } from "../src/i18n/locales/index.js"
 import { LEVELS, levelNameKey } from "../src/progression/levels.js"
 import { PROGRESSION_MESSAGES } from "../src/progression/messages.js"
 
@@ -8,7 +9,7 @@ const bundles = Object.entries(PROGRESSION_MESSAGES)
 
 describe("progression messages", () => {
     it("ship every supported locale", () => {
-        assert.deepEqual(Object.keys(PROGRESSION_MESSAGES).sort(), ["en", "es", "pt-BR"])
+        for (const { code } of LOCALES) assert.ok(PROGRESSION_MESSAGES[code], code)
     })
 
     it("define the same keys in every locale", () => {

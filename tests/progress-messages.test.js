@@ -1,9 +1,10 @@
 import { describe, it } from "node:test"
 import assert from "node:assert/strict"
+import { LOCALES as SELECTABLE_LOCALES } from "../src/i18n/locales/index.js"
 import { ACHIEVEMENTS } from "../src/progress/achievements/catalog.js"
 import { PROGRESS_MESSAGES } from "../src/progress/messages.js"
 
-const LOCALES = ["pt-BR", "en", "es"]
+const LOCALES = SELECTABLE_LOCALES.map(({ code }) => code)
 
 describe("progress messages", () => {
     it("provides the same keys in every locale", () => {
