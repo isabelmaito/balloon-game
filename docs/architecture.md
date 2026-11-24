@@ -25,9 +25,9 @@ and no runtime dependency: the browser loads `src/main.js` directly.
 - **State lives in JS, the DOM mirrors it.** Entities keep `x`, `y`, `width`
   and `height` in pixels and only write a CSS transform in `render()`.
 - **Sizes are relative to the viewport height**, see `src/config.js`.
-- **Events decouple systems from UI.** `Game` emits `score:changed`,
-  `coin:collected`, `game:state`, `game:setup` and `game:over` on the
-  `EventBus`; widgets subscribe to them. The level system adds
+- **Events decouple systems from UI.** `Game` emits `game:state`,
+  `game:setup` and `game:over`, and `CoinSystem` emits `coin:collected` and
+  `score:changed` on the `EventBus`; widgets subscribe to them. The level system adds
   `level:changed` with `{ level, number, isFirst }`.
 - **Systems extend a match.** `game.addSystem(system)` plugs an object with
   optional `setup(game)`, `update(deltaSeconds, game)` and `teardown(game)`.
@@ -109,6 +109,15 @@ channel or a `disconnected`/`failed` connection ends the session; both sides
 return to the menu and `online:ended { reason }` shows why. `OnlineSession`
 also emits `online:connected { role }` once both peers said hello. Only the
 host can start a rematch from the results screen.
+
+## Scrolling spawns
+
+Coins, hazards and power-ups all extend `ScrollingSpawnSystem`: a spawner
+drops a new entity at `rightEdgeSpawn()` (`src/game/spawn-position.js`), the
+group scrolls it left, and `onTouch()` runs when a balloon overlaps it.
+`CoinSystem` spawns into `game.coins`, a group the game owns because online
+sync mirrors into it too; a system that uses such a shared group (see
+`sharedGroup()`) leaves clearing and rendering it to the owner.
 
 ## Hazards, lives and power-ups
 

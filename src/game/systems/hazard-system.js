@@ -2,7 +2,8 @@ import { HAZARD, HAZARDS } from "../../config.js"
 import { viewport } from "../../core/viewport.js"
 import { Bird } from "../../entities/bird.js"
 import { StormCloud } from "../../entities/storm-cloud.js"
-import { pickRandom, randomBetween } from "../../utils/math.js"
+import { pickRandom } from "../../utils/math.js"
+import { rightEdgeSpawn } from "../spawn-position.js"
 import { ScrollingSpawnSystem } from "./scrolling-spawn-system.js"
 
 /** Builds each hazard kind from its config, entering at the right edge. */
@@ -11,8 +12,7 @@ const HAZARD_FACTORIES = [
         const { sizeRatio, aspectRatio, speedRatio } = HAZARDS.stormCloud
         const size = viewport.height * sizeRatio
         return new StormCloud({
-            x: viewport.width,
-            y: randomBetween(0, viewport.height - size * aspectRatio),
+            ...rightEdgeSpawn(viewport, size * aspectRatio),
             size,
             aspectRatio,
             speed: viewport.height * speedRatio * speedMultiplier,
@@ -23,8 +23,7 @@ const HAZARD_FACTORIES = [
         const size = viewport.height * sizeRatio
         const bobAmplitude = viewport.height * bobAmplitudeRatio
         return new Bird({
-            x: viewport.width,
-            y: randomBetween(bobAmplitude, viewport.height - size - bobAmplitude),
+            ...rightEdgeSpawn(viewport, size, { margin: bobAmplitude }),
             size,
             speed: viewport.height * speedRatio * speedMultiplier,
             bobAmplitude,

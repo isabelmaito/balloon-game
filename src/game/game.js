@@ -1,14 +1,10 @@
-import { BALLOON, COIN, HITBOX_RATIO } from "../config.js"
+import { BALLOON } from "../config.js"
 import { EntityGroup } from "../core/entity-group.js"
 import { GameLoop } from "../core/game-loop.js"
-import { Spawner } from "../core/spawner.js"
 import { viewport } from "../core/viewport.js"
 import { Balloon } from "../entities/balloon.js"
-import { Coin } from "../entities/coin.js"
 import { DEFAULT_BINDINGS } from "../input/bindings.js"
 import { Controls } from "../input/controls.js"
-import { intersects, shrink } from "../utils/collision.js"
-import { randomBetween } from "../utils/math.js"
 import { DEFAULT_DIFFICULTY, getDifficulty } from "./difficulty.js"
 import { Player } from "./player.js"
 
@@ -28,12 +24,8 @@ export class Game {
         this.keyboard = keyboard
         this.events = events
         this.loop = new GameLoop((deltaSeconds) => this.update(deltaSeconds))
+        /** Owned here because both the coin system and online sync fill it. */
         this.coins = new EntityGroup(playfield)
-        this.coinSpawner = new Spawner({
-            spawn: () => this.spawnCoin(),
-            minInterval: COIN.minSpawnInterval,
-            maxInterval: COIN.maxSpawnInterval,
-        })
         this.players = []
         this.difficulty = getDifficulty(DEFAULT_DIFFICULTY)
         this.levelModifiers = NEUTRAL_MODIFIERS
@@ -83,7 +75,6 @@ export class Game {
         this.isSimulating = simulate
         for (const system of this.systems) system.teardown?.(this)
         this.coins.clear()
-        this.coinSpawner.reset()
         for (const { balloon } of this.players) balloon.destroy()
         this.players = playerSetups.map((setup, index) => this.createPlayer({ ...setup, index }))
         this.handleResize()
@@ -162,16 +153,6 @@ export class Game {
         }
     }
 
-    spawnCoin() {
-        const size = viewport.height * COIN.sizeRatio
-        this.coins.add(new Coin({
-            x: viewport.width,
-            y: randomBetween(0, viewport.height - size),
-            size,
-            speed: viewport.height * COIN.speedRatio * this.speedMultiplier,
-        }))
-    }
-
     update(deltaSeconds) {
         if (this.isSimulating) this.simulate(deltaSeconds)
         for (const system of this.systems) system.update?.(deltaSeconds, this)
@@ -181,26 +162,8 @@ export class Game {
         this.coins.render()
     }
 
-    /** Applies the match rules: movement, spawning and coin collection. */
+    /** Moves the balloons; spawning and touching are left to the systems. */
     simulate(deltaSeconds) {
         for (const player of this.players) player.update(deltaSeconds, viewport)
-
-        this.coinSpawner.update(deltaSeconds * this.spawnMultiplier)
-        this.coins.update(deltaSeconds)
-        for (const player of this.players) this.collectTouchedCoins(player)
-    }
-
-    collectTouchedCoins(player) {
-        if (player.isOut) return
-        const balloonHitbox = shrink(player.balloon.bounds, HITBOX_RATIO)
-        for (const coin of this.coins.items) {
-            if (coin.isAlive && intersects(balloonHitbox, coin.bounds)) {
-                coin.destroy()
-                player.addScore(coin.value * player.coinMultiplier)
-                this.events.emit("coin:collected", { player, coin })
-                this.events.emit("score:changed", { player, score: player.score })
-            }
-        }
-        this.coins.prune()
     }
 }

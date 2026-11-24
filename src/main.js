@@ -4,6 +4,7 @@ import { Settings } from "./core/settings.js"
 import { storage } from "./core/storage.js"
 import { Keyboard } from "./core/keyboard.js"
 import { Game } from "./game/game.js"
+import { CoinSystem } from "./game/systems/coin-system.js"
 import { installSurvivalSystems } from "./game/systems/index.js"
 import { i18n, translateDom } from "./i18n/index.js"
 import { DEFAULT_LOCALE } from "./i18n/locales/index.js"
@@ -30,6 +31,7 @@ const game = new Game({
     keyboard,
     events,
 })
+game.addSystem(new CoinSystem({ events }))
 const survival = installSurvivalSystems({ game, events })
 
 const hud = new Hud({ root: document.getElementById("hud"), events })
