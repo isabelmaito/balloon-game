@@ -27,6 +27,14 @@ export function createFakeElement(tagName = "div") {
             this.children.push(child)
             return child
         },
+        append(...children) {
+            for (const child of children) this.appendChild(child)
+        },
+        replaceChildren(...children) {
+            for (const child of [...this.children]) child.parentNode = null
+            this.children = []
+            this.append(...children)
+        },
         remove() {
             if (!this.parentNode) return
             this.parentNode.children.splice(this.parentNode.children.indexOf(this), 1)
