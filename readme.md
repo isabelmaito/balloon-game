@@ -66,6 +66,16 @@ O céu muda conforme a distância percorrida, e cada fase deixa o jogo mais ráp
 Clássico, festa, ar quente, coração e estrela. Cada jogador escolhe o seu no menu;
 os quatro novos são desenhados só com CSS.
 
+## Dois jogadores no mesmo teclado
+
+Escolha **2 jogadores** no menu: o jogador 1 usa as setas e o jogador 2 usa W A S D.
+Cada um tem seu placar e suas vidas, e a partida só acaba quando os dois caem.
+
+<p align="center">
+  <img src="screenshots/v4/menu-two-players.jpg" alt="Menu com dois jogadores, um com balão de ar quente e outro com balão de festa" width="400">
+  <img src="screenshots/v4/two-players.jpg" alt="Partida com dois jogadores, placar e vidas de cada um no topo" width="400">
+</p>
+
 ## Funcionalidades
 
 - **Fases**: dia, pôr do sol, noite e tempestade, cada uma mais rápida que a anterior.
