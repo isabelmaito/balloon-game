@@ -20,6 +20,27 @@ longe possível, sozinho, com alguém no mesmo teclado ou online.
 
 <br clear="right">
 
+## Obstáculos, vidas e power-ups
+
+<p align="center">
+  <img src="screenshots/v4/gameplay-shield.jpg" alt="Balão com escudo ativo passando por uma nuvem de tempestade e várias moedas" width="600">
+</p>
+
+| Power-up | Efeito | Duração |
+| --- | --- | --- |
+| Escudo | Absorve a próxima batida | Até ser usado |
+| Ímã | Puxa as moedas próximas | 8 s |
+| Moedas em dobro | Cada moeda vale 2 pontos | 10 s |
+
+| Dificuldade | Vidas | Velocidade | Obstáculos |
+| --- | --- | --- | --- |
+| Fácil | 5 | 80% | 70% |
+| Normal | 3 | 100% | 100% |
+| Difícil | 2 | 130% | 140% |
+
+Depois de uma batida o balão pisca e fica alguns instantes invulnerável. Os efeitos
+ativos aparecem no HUD, ao lado das vidas.
+
 ## Funcionalidades
 
 - **Fases**: dia, pôr do sol, noite e tempestade, cada uma mais rápida que a anterior.
