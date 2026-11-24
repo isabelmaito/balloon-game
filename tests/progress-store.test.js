@@ -24,8 +24,8 @@ describe("stats reducers", () => {
     })
 
     it("keeps the best records without counting the match", () => {
-        const stats = applyMatchRecords({ ...EMPTY_STATS, bestScore: 50 }, match())
-        assert.equal(stats.bestScore, 50)
+        const stats = applyMatchRecords({ ...EMPTY_STATS, bestMatchCoins: 50 }, match())
+        assert.equal(stats.bestMatchCoins, 50)
         assert.equal(stats.longestMatchSeconds, 30)
         assert.equal(stats.matchesPlayed, 0)
     })
@@ -41,7 +41,7 @@ describe("stats reducers", () => {
     it("ignores missing optional match fields", () => {
         const stats = countFinishedMatch(EMPTY_STATS, { score: 3, players: 1 })
         assert.equal(stats.bestLevel, 0)
-        assert.equal(stats.bestScore, 3)
+        assert.equal(stats.bestMatchCoins, 0)
     })
 })
 
