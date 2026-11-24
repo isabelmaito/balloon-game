@@ -1,6 +1,6 @@
 {
   "name": "balloon-game",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "Browser balloon game built with vanilla JavaScript",
   "private": true,
   "type": "module",
