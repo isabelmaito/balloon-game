@@ -140,7 +140,9 @@ export class OnlineSession {
         }
         if (this.isConnected) return
         this.isConnected = true
-        this.#system = this.isHost ? this.#createHostSync() : new GuestSyncSystem({ send: this.#send })
+        this.#system = this.isHost
+            ? this.#createHostSync()
+            : new GuestSyncSystem({ send: this.#send, levels: this.#levels })
         this.#game.addSystem(this.#system)
         this.#events.emit("online:connected", { role: this.role })
     }
