@@ -8,9 +8,9 @@ import { Coin } from "../entities/coin.js"
 import { DEFAULT_BINDINGS } from "../input/bindings.js"
 import { Controls } from "../input/controls.js"
 import { intersects, shrink } from "../utils/collision.js"
-import { randomBetween } from "../utils/math.js"
 import { DEFAULT_DIFFICULTY, getDifficulty } from "./difficulty.js"
 import { Player } from "./player.js"
+import { rightEdgeSpawn } from "./spawn-position.js"
 
 export const GAME_STATE = Object.freeze({
     IDLE: "idle",
@@ -165,8 +165,7 @@ export class Game {
     spawnCoin() {
         const size = viewport.height * COIN.sizeRatio
         this.coins.add(new Coin({
-            x: viewport.width,
-            y: randomBetween(0, viewport.height - size),
+            ...rightEdgeSpawn(viewport, size),
             size,
             speed: viewport.height * COIN.speedRatio * this.speedMultiplier,
         }))
