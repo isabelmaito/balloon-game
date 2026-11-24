@@ -63,20 +63,40 @@ public STUN server is configured, so peers behind strict NATs may not connect.
 **The host is authoritative.** It runs the normal simulation; player 2 is
 steered by a `RemoteControls` (same `direction` getter as `Controls`) fed by the
 guest's input. `HostSyncSystem` broadcasts a snapshot 20 times per second. The
-guest's game is set up with `simulate: false` (no movement, spawning or
-collisions) and `GuestSyncSystem` sends the local direction whenever it changes
-and eases balloons and coins toward the latest snapshot. Positions travel as
-fractions of the viewport so different window sizes line up.
+guest's game is set up with `simulate: false`, so `game.isSimulating` is false:
+no movement, spawning, collisions, hazard hits or distance measuring. Positions
+and sizes travel as fractions of the viewport so different window sizes line up.
+
+**Wiring.** `main.js` passes the `{ hazards, powerUps }` systems returned by
+`installSurvivalSystems()` and the `LevelSystem` returned by `mountProgression()`
+to `OnlineSession`, which hands them to the sync system of its role.
+
+**What the guest mirrors.** `GuestSyncSystem` sends the local direction
+whenever it changes and applies the latest snapshot:
+
+- Balloons, coins, hazards and power-ups ease toward their snapshot position.
+  `EntityMirror` matches each list by id (new ids appear in place, missing ones
+  are destroyed); hazards and power-ups are rebuilt from their `kind` and box by
+  `src/net/remote-entities.js`.
+- Once per snapshot, changed lives go through `announceLives()` (the same
+  `lives:changed` / `player:out` the `LivesSystem` raises), changed effect names
+  start or end local timers and emit `effects:changed`, and the distance goes to
+  `LevelSystem.syncDistance()`, which raises `level:changed` like a local run.
+  The HUD, balloon markers, level banner and sky therefore need no online code.
+
+**Players.** Each peer steers its own balloon with its local player-1 keys and
+skin from `app.matchOptions.players[0]`. Skins are exchanged in `hello` (the
+guest's) and `start` (the host's), so both screens show the owners' choices.
 
 **Messages** are JSON objects with a `type`; each type has a validator and
 anything invalid from the peer is dropped.
 
 | Type | Direction | Payload |
 | --- | --- | --- |
-| `hello` | both | `version` (protocol version; a mismatch ends the session) |
+| `hello` | both | `version` (protocol version; a mismatch ends the session), `skin` (optional so older peers still reach the version check) |
 | `input` | guest → host | `direction: { x, y }`, each axis -1, 0 or 1 |
-| `state` | host → guest | `players: [{ id, x, y, score }]`, `coins: [{ id, x, y }]` |
-| `start` | host → guest | `difficulty` |
+| `state` | host → guest | `players: [{ id, x, y, score, lives, effects }]` (`effects` are effect names), `coins: [{ id, x, y }]`, `hazards` and `powerUps: [{ id, kind, x, y, w, h }]`, `distance` (meters) |
+| `start` | host → guest | `difficulty`, `skin` (the host's balloon) |
 | `pause` | both | `paused` |
 | `over` | host → guest | `scores: [{ id, score }]` |
 | `leave` | both | none |
