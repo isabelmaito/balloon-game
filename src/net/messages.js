@@ -1,6 +1,7 @@
 import { registerMessages } from "../i18n/index.js"
 
-registerMessages({
+/** Strings for the online mode, per locale. */
+export const ONLINE_MESSAGES = Object.freeze({
     "pt-BR": {
         "online.menu": "Online",
         "online.title": "Jogar online",
@@ -83,3 +84,5 @@ registerMessages({
         "online.ended.versionMismatch": "El otro jugador tiene otra versión del juego.",
     },
 })
+
+registerMessages(ONLINE_MESSAGES)
