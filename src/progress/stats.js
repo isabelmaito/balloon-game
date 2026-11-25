@@ -1,12 +1,13 @@
 /**
- * Lifetime statistics and the pure reducers that update them.
+ * Lifetime statistics and the pure reducers that update them. The best score
+ * is not kept here: the high score table, which only records finished
+ * matches, is its single source.
  * A match summary looks like
  * `{ score, coins, durationSeconds, flawlessSeconds, level, difficulty, players, brokeRecord }`.
  */
 export const EMPTY_STATS = Object.freeze({
     wallet: 0,
     matchesPlayed: 0,
-    bestScore: 0,
     bestMatchCoins: 0,
     longestMatchSeconds: 0,
     longestFlawlessSeconds: 0,
@@ -37,7 +38,6 @@ export function addCoins(stats, amount) {
 export function applyMatchRecords(stats, match) {
     return {
         ...stats,
-        bestScore: Math.max(stats.bestScore, match.score ?? 0),
         bestMatchCoins: Math.max(stats.bestMatchCoins, match.coins ?? 0),
         longestMatchSeconds: Math.max(stats.longestMatchSeconds, match.durationSeconds ?? 0),
         longestFlawlessSeconds: Math.max(stats.longestFlawlessSeconds, match.flawlessSeconds ?? 0),

@@ -41,7 +41,6 @@ describe("stats", () => {
         it("raises every best-of record", () => {
             assert.deepEqual(applyMatchRecords(EMPTY_STATS, match()), {
                 ...EMPTY_STATS,
-                bestScore: 10,
                 bestMatchCoins: 4,
                 longestMatchSeconds: 30,
                 longestFlawlessSeconds: 12,
@@ -50,9 +49,9 @@ describe("stats", () => {
         })
 
         it("never lowers a record", () => {
-            const stats = applyMatchRecords(EMPTY_STATS, match({ score: 50, level: 5 }))
-            const next = applyMatchRecords(stats, match({ score: 20, level: 1 }))
-            assert.equal(next.bestScore, 50)
+            const stats = applyMatchRecords(EMPTY_STATS, match({ coins: 50, level: 5 }))
+            const next = applyMatchRecords(stats, match({ coins: 20, level: 1 }))
+            assert.equal(next.bestMatchCoins, 50)
             assert.equal(next.bestLevel, 5)
         })
 
@@ -74,7 +73,7 @@ describe("stats", () => {
             assert.equal(stats.hardMatches, 0)
             assert.equal(stats.multiplayerMatches, 0)
             assert.equal(stats.recordsBroken, 0)
-            assert.equal(stats.bestScore, 10)
+            assert.equal(stats.longestMatchSeconds, 30)
         })
 
         it("counts hard-difficulty matches", () => {
@@ -99,11 +98,11 @@ describe("stats", () => {
 
         it("accumulates across matches without mutating the input", () => {
             const first = countFinishedMatch(EMPTY_STATS, match({ difficulty: "hard" }))
-            const second = countFinishedMatch(first, match({ players: 2, score: 3 }))
+            const second = countFinishedMatch(first, match({ players: 2, coins: 1 }))
             assert.equal(second.matchesPlayed, 2)
             assert.equal(second.hardMatches, 1)
             assert.equal(second.multiplayerMatches, 1)
-            assert.equal(second.bestScore, 10)
+            assert.equal(second.bestMatchCoins, 4)
             assert.equal(first.matchesPlayed, 1)
             assert.equal(EMPTY_STATS.matchesPlayed, 0)
         })
